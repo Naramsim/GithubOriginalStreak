@@ -1,4 +1,4 @@
-GithubOriginalStreak ![License](https://img.shields.io/badge/License-MPL2.0-yellowgreen.svg)
+![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/icons/g48.png) GithubOriginalStreak ![License](https://img.shields.io/badge/License-MPL2.0-yellowgreen.svg)
 ===
 
 Revert GitHub contributions and streak. A browser extension.
