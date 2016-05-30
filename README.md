@@ -10,3 +10,4 @@ Revert GitHub contributions and streak. A browser extension.
 [![chrome](https://img.shields.io/badge/extension-chrome-brightgreen.svg)](https://chrome.google.com/webstore/detail/github-original-streak/jgfeifpakohnblfnjdpigclinhbkocja)
 ![firefox](https://img.shields.io/badge/extension-firefox-red.svg)
 
+![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/icons/streak.jpg)
