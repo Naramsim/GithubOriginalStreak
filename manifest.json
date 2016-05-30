@@ -1,0 +1,35 @@
+{
+  "name": "Github Original Streak",
+  "short_name": "Github Streak",
+  "version": "0.0.3",
+  "version_name": "3a",
+  "manifest_version": 2,
+  "description": "Re-build original current and longest streak in Github profiles",
+  "homepage_url": "https://github.com",
+  "author": "Naramsim",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "default_locale": "en",
+  "offline_enabled": true,
+  "permissions": [
+    "*://github.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://github.com/*"
+      ],
+      "all_frames": false,
+      "run_at": "document_end",
+      "css": [
+        "src/inject/inject.css"
+      ],
+      "js": [
+        "src/inject/inject.js"
+      ]
+    }
+  ]
+}
