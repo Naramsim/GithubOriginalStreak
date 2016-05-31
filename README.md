@@ -1,4 +1,4 @@
-![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/icons/g48.png) GithubOriginalStreak ![License](https://img.shields.io/badge/License-MPL2.0-yellowgreen.svg)
+![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/g48.png) GithubOriginalStreak ![License](https://img.shields.io/badge/License-MPL2.0-yellowgreen.svg)
 ===
 
 Revert GitHub contributions and streak. A browser extension.
@@ -12,4 +12,4 @@ Revert GitHub contributions and streak. A browser extension.
 
 For downloading the extensions just click on the badges above, they will bring you to the appropriate store.
 
-![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/icons/streak.jpg)
+![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/streak.jpg)
