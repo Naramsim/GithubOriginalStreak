@@ -1,0 +1,15 @@
+{
+  "title": "GitHub Original Streak",
+  "name": "firefox",
+  "version": "0.1.0",
+  "description": "An add-on that gets back current and longest streak on Github profiles",
+  "main": "index.js",
+  "author": "Naramsim",
+  "engines": {
+    "firefox": ">=38.0a1"
+  },
+  "license": "MPL 2.0",
+  "keywords": [
+    "jetpack"
+  ]
+}

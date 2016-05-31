@@ -1,0 +1,31 @@
+{
+  "name": "github-original-streak",
+  "version": "0.1.0",
+  "description": "Get back longest and current streak on Github prifiles",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Naramsim/GithubOriginalStreak.git"
+  },
+  "keywords": [
+    "github",
+    "streak",
+    "original"
+  ],
+  "author": "Naramsim",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/Naramsim/GithubOriginalStreak/issues"
+  },
+  "homepage": "https://github.com/Naramsim/GithubOriginalStreak#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-directory-sync": "^1.2.3",
+    "gulp-newer": "^1.1.0",
+    "gulp-util": "^3.0.7",
+    "newer": "^0.1.5"
+  }
+}
