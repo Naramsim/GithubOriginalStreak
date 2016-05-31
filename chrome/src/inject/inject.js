@@ -32,9 +32,9 @@ var innerStreak = ""
 var firstCommitDate = 0
 var lastCommitDate = 0
 var longestStreakStartingDate = 0
-var longestStreakEndingDate = 0;
+var longestStreakEndingDate = 0
 
-(function() {
+function inject() {
     if(!!document.getElementById("contributions-calendar")){
         var couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if(couple.length === 1){
@@ -42,7 +42,7 @@ var longestStreakEndingDate = 0;
         }else{
             couple[2].textContent = "Contributions"
         }
-        
+         
         var days = ([].slice.call(document.getElementsByClassName("day"))).reverse()
         days.forEach(function(day){
             var todayValue = !!+day.attributes["data-count"].value;
@@ -65,7 +65,7 @@ var longestStreakEndingDate = 0;
             }
             if(!currentStreak && stops > 30 && todayValue && !notActiveForMonths){
                 var lastCommit = new Date(day.attributes["data-date"].value)
-                lastMonth = (new Date()).getMonth() - lastCommit.getMonth() + (12 * ((new Date()).getFullYear() - lastCommit.getFullYear()));
+                var lastMonth = (new Date()).getMonth() - lastCommit.getMonth() + (12 * ((new Date()).getFullYear() - lastCommit.getFullYear()));
                 notActiveForMonths = 'Last contributed <time>{{month}} months ago</time>'.replace("{{month}}", lastMonth)
             }
             if(todayValue){
@@ -102,4 +102,28 @@ var longestStreakEndingDate = 0;
             .replace("{{longestStreakMonthT}}", monthNames[longestStreakEndingDate.getMonth()])
         document.getElementById("contributions-calendar").insertAdjacentHTML('beforeend', skeleton)
     }
+}
+
+function attachClickInjecter() {
+    var pixelBar = document.getElementById("js-pjax-loader-bar")
+    var config = { attributes: true, childList: true, characterData: true, attributeOldValue: true };
+    ([].slice.call(document.getElementsByClassName("tabnav-tab")).forEach(function(tab) {
+        tab.addEventListener('click', function() { //on "Repo" click the event is deattached
+            var observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if(mutation.oldValue && mutation.oldValue.indexOf("is-loading") > 0 ){
+                        inject()
+                        attachClickInjecter()
+                        observer.disconnect()
+                    }
+                })   
+            })
+            observer.observe(pixelBar, config);
+        }, false)
+    }))
+}
+
+(function() {
+    inject()
+    attachClickInjecter()
 })();
