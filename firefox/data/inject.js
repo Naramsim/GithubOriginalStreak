@@ -24,9 +24,9 @@ var totalContributions = 0
 var longestStreak = 0
 var evaluatingStreak = 0
 var stop = 0
-var stops = 0
+var nonContributingDays = 0
 var currentStreak = 0
-var notActiveForMonths = 0
+var hasNoCurrentStreak = 0
 var streakFromTo = ""
 var innerStreak = ""
 var firstCommitDate = 0
@@ -46,12 +46,17 @@ function inject() {
         var days = ([].slice.call(document.getElementsByClassName("day"))).reverse()
         days.forEach(function(day){
             var todayValue = !!+day.attributes["data-count"].value;
-            if(todayValue){totalContributions += +day.attributes["data-count"].value; firstCommitDate = new Date(day.attributes["data-date"].value)}
-            if(todayValue && !lastCommitDate){lastCommitDate = new Date(day.attributes["data-date"].value)}
-            if(todayValue && !stops){
+            if(todayValue){
+                totalContributions += +day.attributes["data-count"].value; 
+                firstCommitDate = new Date(day.attributes["data-date"].value)
+            }
+            if(todayValue && !lastCommitDate){
+                lastCommitDate = new Date(day.attributes["data-date"].value)
+            }
+            if(todayValue && !stop){
                 ++currentStreak
             }else{
-                ++stops;
+                ++nonContributingDays;
                 if(stop === 0){
                     var start = new Date(day.attributes["data-date"].value)
                     var end = new Date()
@@ -63,10 +68,22 @@ function inject() {
                     innerStreak = streakFromTo
                 }
             }
-            if(!currentStreak && stops > 30 && todayValue && !notActiveForMonths){
+            if(!currentStreak && nonContributingDays > 1 && todayValue && !hasNoCurrentStreak){
                 var lastCommit = new Date(day.attributes["data-date"].value)
-                var lastMonth = (new Date()).getMonth() - lastCommit.getMonth() + (12 * ((new Date()).getFullYear() - lastCommit.getFullYear()));
-                notActiveForMonths = 'Last contributed <time>{{month}} months ago</time>'.replace("{{month}}", lastMonth)
+                var diff = Math.abs((new Date()).getTime() - lastCommit.getTime());
+                var unit = "days"
+                var diffDays = Math.ceil(diff / (1000 * 3600 * 24)); 
+                if(diffDays === 1){
+                    unit = "day"
+                }
+                if(diffDays > 30) {
+                    unit = "month"
+                    if(diffDays > 60) {
+                        unit = "months"
+                    }
+                    diffDays = (new Date()).getMonth() - lastCommit.getMonth() + (12 * ((new Date()).getFullYear() - lastCommit.getFullYear()));
+                }
+                hasNoCurrentStreak = 'Last contributed <time>{{time}} {{unit}} ago</time>'.replace("{{time}}", diffDays).replace("{{unit}}", unit)
             }
             if(todayValue){
                 ++evaluatingStreak
@@ -80,31 +97,33 @@ function inject() {
                 longestStreakEndingDate.setDate(longestStreakEndingDate.getDate() + longestStreak - 1)
             }
         });
-        if(notActiveForMonths){
-            currentStreakSkeleton = currentStreakSkeleton.replace("{{innerStreak}}", notActiveForMonths)
+        if(hasNoCurrentStreak){
+            currentStreakSkeleton = currentStreakSkeleton.replace("{{innerStreak}}", hasNoCurrentStreak)
         }else{
             currentStreakSkeleton = currentStreakSkeleton.replace("{{innerStreak}}", innerStreak)
         }
-        totalSkeleton = totalSkeleton.replace("{{monthF}}", monthNames[firstCommitDate.getMonth()])
-            .replace("{{dayF}}", firstCommitDate.getUTCDate())
-            .replace("{{yearF}}", firstCommitDate.getFullYear())
-            .replace("{{monthT}}", monthNames[lastCommitDate.getMonth()])
-            .replace("{{dayT}}", lastCommitDate.getUTCDate())
-            .replace("{{yearT}}", lastCommitDate.getFullYear()) 
-        skeleton = skeleton.replace("{{totalContributions}}", totalContributions)
-            .replace("{{longestStreak}}", longestStreak)
-            .replace("{{currentStreak}}", currentStreak)
-            .replace("{{currentStreakSkeleton}}", currentStreakSkeleton)
-            .replace("{{totalSkeleton}}", totalSkeleton)
-            .replace("{{longestStreakDayF}}", longestStreakStartingDate.getUTCDate())
-            .replace("{{longestStreakMonthF}}", monthNames[longestStreakStartingDate.getMonth()])
-            .replace("{{longestStreakDayT}}", longestStreakEndingDate.getUTCDate())
-            .replace("{{longestStreakMonthT}}", monthNames[longestStreakEndingDate.getMonth()])
-        var range = document.createRange();
-        range.selectNode(document.getElementById("contributions-calendar"));
-        var documentFragment = range.createContextualFragment(skeleton);
-        document.getElementById("contributions-calendar").appendChild(documentFragment);
-        //document.getElementById("contributions-calendar").insertAdjacentHTML('beforeend', skeleton)
+        if(firstCommitDate){
+            totalSkeleton = totalSkeleton.replace("{{monthF}}", monthNames[firstCommitDate.getMonth()])
+                .replace("{{dayF}}", firstCommitDate.getUTCDate())
+                .replace("{{yearF}}", firstCommitDate.getFullYear())
+                .replace("{{monthT}}", monthNames[lastCommitDate.getMonth()])
+                .replace("{{dayT}}", lastCommitDate.getUTCDate())
+                .replace("{{yearT}}", lastCommitDate.getFullYear()) 
+            skeleton = skeleton.replace("{{totalContributions}}", totalContributions)
+                .replace("{{longestStreak}}", longestStreak)
+                .replace("{{currentStreak}}", currentStreak)
+                .replace("{{currentStreakSkeleton}}", currentStreakSkeleton)
+                .replace("{{totalSkeleton}}", totalSkeleton)
+                .replace("{{longestStreakDayF}}", longestStreakStartingDate.getUTCDate())
+                .replace("{{longestStreakMonthF}}", monthNames[longestStreakStartingDate.getMonth()])
+                .replace("{{longestStreakDayT}}", longestStreakEndingDate.getUTCDate())
+                .replace("{{longestStreakMonthT}}", monthNames[longestStreakEndingDate.getMonth()])
+            var range = document.createRange();
+            range.selectNode(document.getElementById("contributions-calendar"));
+            var documentFragment = range.createContextualFragment(skeleton);
+            document.getElementById("contributions-calendar").appendChild(documentFragment);
+            //document.getElementById("contributions-calendar").insertAdjacentHTML('beforeend', skeleton)
+        }
     }
 }
 
