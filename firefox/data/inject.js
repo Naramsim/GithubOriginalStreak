@@ -100,7 +100,11 @@ function inject() {
             .replace("{{longestStreakMonthF}}", monthNames[longestStreakStartingDate.getMonth()])
             .replace("{{longestStreakDayT}}", longestStreakEndingDate.getUTCDate())
             .replace("{{longestStreakMonthT}}", monthNames[longestStreakEndingDate.getMonth()])
-        document.getElementById("contributions-calendar").insertAdjacentHTML('beforeend', skeleton)
+        var range = document.createRange();
+        range.selectNode(document.getElementById("contributions-calendar"));
+        var documentFragment = range.createContextualFragment(skeleton);
+        document.getElementById("contributions-calendar").appendChild(documentFragment);
+        //document.getElementById("contributions-calendar").insertAdjacentHTML('beforeend', skeleton)
     }
 }
 
