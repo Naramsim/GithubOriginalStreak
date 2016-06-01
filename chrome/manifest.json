@@ -1,8 +1,8 @@
 {
   "name": "Github Original Streak",
   "short_name": "Github Streak",
-  "version": "0.4.0",
-  "version_name": "4b",
+  "version": "1.0.0",
+  "version_name": "1R",
   "manifest_version": 2,
   "description": "Re-build original current and longest streak in Github profiles",
   "homepage_url": "https://github.com/Naramsim/GithubOriginalStreak",
