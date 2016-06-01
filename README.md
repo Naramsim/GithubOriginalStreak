@@ -9,7 +9,7 @@ Revert GitHub contributions and streak. A browser extension.
 #### Support
 [![chrome](https://img.shields.io/badge/extension-chrome-brightgreen.svg)](https://chrome.google.com/webstore/detail/github-original-streak/jgfeifpakohnblfnjdpigclinhbkocja)
 [![firefox](https://img.shields.io/badge/extension-firefox-brightgreen.svg)](https://addons.mozilla.org/en-US/firefox/addon/github-original-streak/)
-[![opera](https://img.shields.io/badge/extension-opera-yellow.svg)](https://addons.opera.com/developer/extensions/details/github-original-streak/0.3.0/)
+[![opera](https://img.shields.io/badge/extension-opera-brightgreen.svg)](https://addons.opera.com/it/extensions/details/github-original-streak/)
 
 For downloading the extensions just click on the badges above, they will bring you to the appropriate store.
 
