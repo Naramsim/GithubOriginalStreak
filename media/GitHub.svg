@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="242px" height="242px" viewBox="0 0 242 242" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>GitHub</title>
+    <desc>GitHub Commit</desc>
+    <g>
+        <g>
+            <rect id="#D6E685" fill="#D6E685" x="0" y="132" width="110" height="110"></rect>
+            <rect id="#8CC665" fill="#1E6823" x="0" y="0" width="110" height="110"></rect>
+            <rect id="#44A340" fill="#44A340" x="132" y="0" width="110" height="110"></rect>
+            <rect id="#1E6823" fill="#8CC665" x="132" y="132" width="110" height="110"></rect>
+        </g>
+    </g>
+</svg>
