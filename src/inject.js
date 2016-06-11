@@ -1,20 +1,18 @@
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-var totalContributions = 0
-var longestStreak = 0
-var evaluatingStreak = 0
-var stop = 0
-var nonContributingDays = 0
-var currentStreak = 0
-var hasNoCurrentStreak = 0
-var streakFromTo = ""
-var innerStreak = ""
-var firstCommitDate = 0
-var lastCommitDate = 0
-var longestStreakStartingDate = 0
-var longestStreakEndingDate = 0
-
 function inject() {
+	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+	var totalContributions = 0
+	var longestStreak = 0
+	var evaluatingStreak = 0
+	var stop = 0
+	var nonContributingDays = 0
+	var currentStreak = 0
+	var hasNoCurrentStreak = 0
+	var streakFromTo = ""
+	var innerStreak = ""
+	var firstCommitDate = 0
+	var lastCommitDate = 0
+	var longestStreakStartingDate = 0
+	var longestStreakEndingDate = 0
     if (!!document.getElementById("contributions-calendar")) {
         var couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if (couple.length === 1) {
