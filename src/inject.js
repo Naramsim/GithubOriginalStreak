@@ -1,29 +1,29 @@
 function inject() {
-	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-	var totalContributions = 0
-	var longestStreak = 0
-	var evaluatingStreak = 0
-	var stop = 0
-	var nonContributingDays = 0
-	var currentStreak = 0
-	var hasNoCurrentStreak = 0
-	var streakFromTo = ""
-	var innerStreak = ""
-	var firstCommitDate = 0
-	var lastCommitDate = 0
-	var longestStreakStartingDate = 0
-	var longestStreakEndingDate = 0
+  const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+  let totalContributions = 0
+  let longestStreak = 0
+  let evaluatingStreak = 0
+  let stop = 0
+  let nonContributingDays = 0
+  let currentStreak = 0
+  let hasNoCurrentStreak = 0
+  let streakFromTo = ""
+  let innerStreak = ""
+  let firstCommitDate = 0
+  let lastCommitDate = 0
+  let longestStreakStartingDate = 0
+  let longestStreakEndingDate = 0
     if (!!document.getElementById("contributions-calendar")) {
-        var couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
+        let couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if (couple.length === 1) {
             couple[0].textContent = "Contributions"
-        }else {
+        } else {
             couple[2].textContent = "Contributions"
         }
-         
+
         const days = ([].slice.call(document.getElementsByClassName("day"))).reverse()
         days.forEach((day) => {
-            var todayValue = !!+day.attributes["data-count"].value
+            let todayValue = !!+day.attributes["data-count"].value
             if (todayValue) {
                 totalContributions += +day.attributes["data-count"].value
                 firstCommitDate = new Date(day.attributes["data-date"].value)
@@ -33,7 +33,7 @@ function inject() {
             }
             if (todayValue && !stop) {
                 ++currentStreak
-            }else {
+            } else {
                 ++nonContributingDays
                 if (stop === 0) {
                     const start = new Date(day.attributes["data-date"].value)
@@ -76,7 +76,7 @@ function inject() {
                 longestStreakEndingDate.setDate(longestStreakEndingDate.getDate() + longestStreak - 1)
             }
         })
-        
+
         if (firstCommitDate) {
             const monthFrom = monthNames[firstCommitDate.getMonth()]
             const dayFrom = firstCommitDate.getUTCDate()
@@ -87,7 +87,7 @@ function inject() {
             let currentStreakSkeleton = ""
             if (hasNoCurrentStreak) {
                 currentStreakSkeleton = `<span class="text-muted">${hasNoCurrentStreak}</span>`
-            }else {
+            } else {
                 currentStreakSkeleton = `<span class="text-muted">${innerStreak}</span>`
             }
             const totalSkeleton = `<span class="text-muted">${monthFrom} ${dayFrom} ${yearFrom} - ${monthTo} ${dayTo} ${yearTo}</span>`
@@ -102,7 +102,7 @@ function inject() {
                     <span class="text-muted">
                     ${monthNames[longestStreakStartingDate.getMonth()]} ${longestStreakStartingDate.getUTCDate()} –
                     ${monthNames[longestStreakEndingDate.getMonth()]} ${longestStreakEndingDate.getUTCDate()}
-                    </span>  
+                    </span>
                 </div>
                 <div class="contrib-column table-column">
                     <span class="text-muted">Current streak</span>
@@ -129,7 +129,7 @@ function attachClickInjecter() {
                         attachClickInjecter()
                         observer.disconnect()
                     }
-                })   
+                })
             })
             observer.observe(pixelBar, config)
         }, false)
