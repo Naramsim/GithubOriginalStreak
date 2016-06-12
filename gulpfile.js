@@ -13,7 +13,7 @@ gulp.task('syncCSS', function() {
 			gulp.src(src + '.css'),
 			newer(ff),
 			newer(chrome),
-			cssnano(),
+			//cssnano(),
 			gulp.dest(ff),
 			gulp.dest(chrome)
 		])
@@ -29,7 +29,7 @@ gulp.task('syncJS', function() {
 			babel({
 				presets: ['es2015']
 			}),
-			uglify(),
+			//uglify(),
 			gulp.dest(ff),
 			gulp.dest(chrome)
 		])

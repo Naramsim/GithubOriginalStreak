@@ -1,1 +1,128 @@
-"use strict";function inject(){var t=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],e=0,a=0,n=0,s=0,c=0,l=0,i=0,o="",r="",u=0,d=0,m=0,b=0;if(document.getElementById("contributions-calendar")){var g=document.getElementById("contributions-calendar").previousElementSibling.childNodes;1===g.length?g[0].textContent="Contributions":g[2].textContent="Contributions";var v=[].slice.call(document.getElementsByClassName("day")).reverse();if(v.forEach(function(g){var v=!!+g.attributes["data-count"].value;if(v&&(e+=+g.attributes["data-count"].value,u=new Date(g.attributes["data-date"].value)),v&&!d&&(d=new Date(g.attributes["data-date"].value)),v&&!s)++l;else if(++c,0===s){var p=new Date(g.attributes["data-date"].value),h=new Date,D=p.getUTCDate()+1,C=t[p.getMonth()],f=h.getUTCDate(),y=t[h.getMonth()];o=D+" "+C+" - "+f+" "+y,s=1,r=o}if(!l&&c>1&&v&&!i){var M=new Date(g.attributes["data-date"].value),x=Math.abs((new Date).getTime()-M.getTime()),E="days",w=Math.ceil(x/864e5);1===w&&(E="day"),w>30&&(E="month",w>60&&(E="months"),w=(new Date).getMonth()-M.getMonth()+12*((new Date).getFullYear()-M.getFullYear())),i="Last contributed <time>"+w+" "+E+" ago</time>"}v?++n:n=0,n>a&&(a=n,m=new Date(g.attributes["data-date"].value),b=new Date(g.attributes["data-date"].value),b.setDate(b.getDate()+a-1))}),u){var p=t[u.getMonth()],h=u.getUTCDate(),D=u.getFullYear(),C=t[d.getMonth()],f=d.getUTCDate(),y=d.getFullYear(),M="";M=i?'<span class="text-muted">'+i+"</span>":'<span class="text-muted">'+r+"</span>";var x='<span class="text-muted">'+p+" "+h+" "+D+" - "+C+" "+f+" "+y+"</span>",E='<div class="contrib-column contrib-column-first table-column">\n                    <span class="text-muted">Contributions in the last year</span>\n                    <span class="contrib-number">'+e+" total</span>\n                    "+x+'\n                </div>\n                <div class="contrib-column table-column">\n                    <span class="text-muted">Longest streak</span>\n                    <span class="contrib-number">'+a+' days</span>\n                    <span class="text-muted">\n                    '+t[m.getMonth()]+" "+m.getUTCDate()+" –\n                    "+t[b.getMonth()]+" "+b.getUTCDate()+'\n                    </span>  \n                </div>\n                <div class="contrib-column table-column">\n                    <span class="text-muted">Current streak</span>\n                    <span class="contrib-number">'+l+" days</span>\n                    "+M+"\n                </div>",w=document.createRange();w.selectNode(document.getElementById("contributions-calendar"));var j=w.createContextualFragment(E);document.getElementById("contributions-calendar").appendChild(j)}}}function attachClickInjecter(){var t=document.getElementById("js-pjax-loader-bar"),e={attributes:!0,childList:!0,characterData:!0,attributeOldValue:!0};[].slice.call(document.getElementsByClassName("tabnav-tab")).forEach(function(a){a.addEventListener("click",function(){var a=new MutationObserver(function(t){t.forEach(function(t){t.oldValue&&t.oldValue.indexOf("is-loading")>0&&(inject(),attachClickInjecter(),a.disconnect())})});a.observe(t,e)},!1)})}!function(){inject(),attachClickInjecter()}();
+"use strict";
+
+function inject() {
+    var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    var totalContributions = 0;
+    var longestStreak = 0;
+    var evaluatingStreak = 0;
+    var stop = 0;
+    var nonContributingDays = 0;
+    var currentStreak = 0;
+    var hasNoCurrentStreak = 0;
+    var streakFromTo = "";
+    var innerStreak = "";
+    var firstCommitDate = 0;
+    var lastCommitDate = 0;
+    var longestStreakStartingDate = 0;
+    var longestStreakEndingDate = 0;
+    if (!!document.getElementById("contributions-calendar")) {
+        var couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes;
+        if (couple.length === 1) {
+            couple[0].textContent = "Contributions";
+        } else {
+            couple[2].textContent = "Contributions";
+        }
+
+        var days = [].slice.call(document.getElementsByClassName("day")).reverse();
+        days.forEach(function (day) {
+            var todayValue = !! +day.attributes["data-count"].value;
+            if (todayValue) {
+                totalContributions += +day.attributes["data-count"].value;
+                firstCommitDate = new Date(day.attributes["data-date"].value);
+            }
+            if (todayValue && !lastCommitDate) {
+                lastCommitDate = new Date(day.attributes["data-date"].value);
+            }
+            if (todayValue && !stop) {
+                ++currentStreak;
+            } else {
+                ++nonContributingDays;
+                if (stop === 0) {
+                    var start = new Date(day.attributes["data-date"].value);
+                    var end = new Date();
+                    var dayF = start.getUTCDate() + 1;
+                    var monthF = monthNames[start.getMonth()];
+                    var dayT = end.getUTCDate();
+                    var monthT = monthNames[end.getMonth()];
+                    streakFromTo = dayF + " " + monthF + " - " + dayT + " " + monthT;
+                    stop = 1;
+                    innerStreak = streakFromTo;
+                }
+            }
+            if (!currentStreak && nonContributingDays > 1 && todayValue && !hasNoCurrentStreak) {
+                var lastCommit = new Date(day.attributes["data-date"].value);
+                var diff = Math.abs(new Date().getTime() - lastCommit.getTime());
+                var unit = "days";
+                var timeDiff = Math.ceil(diff / (1000 * 3600 * 24));
+                if (timeDiff === 1) {
+                    unit = "day";
+                }
+                if (timeDiff > 30) {
+                    unit = "month";
+                    if (timeDiff > 60) {
+                        unit = "months";
+                    }
+                    timeDiff = new Date().getMonth() - lastCommit.getMonth() + 12 * (new Date().getFullYear() - lastCommit.getFullYear());
+                }
+                hasNoCurrentStreak = "Last contributed <time>" + timeDiff + " " + unit + " ago</time>";
+            }
+            if (todayValue) {
+                ++evaluatingStreak;
+            } else {
+                evaluatingStreak = 0;
+            }
+            if (evaluatingStreak > longestStreak) {
+                longestStreak = evaluatingStreak;
+                longestStreakStartingDate = new Date(day.attributes["data-date"].value);
+                longestStreakEndingDate = new Date(day.attributes["data-date"].value);
+                longestStreakEndingDate.setDate(longestStreakEndingDate.getDate() + longestStreak - 1);
+            }
+        });
+
+        if (firstCommitDate) {
+            var monthFrom = monthNames[firstCommitDate.getMonth()];
+            var dayFrom = firstCommitDate.getUTCDate();
+            var yearFrom = firstCommitDate.getFullYear();
+            var monthTo = monthNames[lastCommitDate.getMonth()];
+            var dayTo = lastCommitDate.getUTCDate();
+            var yearTo = lastCommitDate.getFullYear();
+            var currentStreakSkeleton = "";
+            if (hasNoCurrentStreak) {
+                currentStreakSkeleton = "<span class=\"text-muted\">" + hasNoCurrentStreak + "</span>";
+            } else {
+                currentStreakSkeleton = "<span class=\"text-muted\">" + innerStreak + "</span>";
+            }
+            var totalSkeleton = "<span class=\"text-muted\">" + monthFrom + " " + dayFrom + " " + yearFrom + " - " + monthTo + " " + dayTo + " " + yearTo + "</span>";
+            var skeleton = "<div class=\"contrib-column contrib-column-first table-column\">\n                    <span class=\"text-muted\">Contributions in the last year</span>\n                    <span class=\"contrib-number\">" + totalContributions + " total</span>\n                    " + totalSkeleton + "\n                </div>\n                <div class=\"contrib-column table-column\">\n                    <span class=\"text-muted\">Longest streak</span>\n                    <span class=\"contrib-number\">" + longestStreak + " days</span>\n                    <span class=\"text-muted\">\n                    " + monthNames[longestStreakStartingDate.getMonth()] + " " + longestStreakStartingDate.getUTCDate() + " –\n                    " + monthNames[longestStreakEndingDate.getMonth()] + " " + longestStreakEndingDate.getUTCDate() + "\n                    </span>\n                </div>\n                <div class=\"contrib-column table-column\">\n                    <span class=\"text-muted\">Current streak</span>\n                    <span class=\"contrib-number\">" + currentStreak + " days</span>\n                    " + currentStreakSkeleton + "\n                </div>";
+            var range = document.createRange();
+            range.selectNode(document.getElementById("contributions-calendar"));
+            var documentFragment = range.createContextualFragment(skeleton);
+            document.getElementById("contributions-calendar").appendChild(documentFragment);
+        }
+    }
+}
+
+function attachClickInjecter() {
+    var pixelBar = document.getElementById("js-pjax-loader-bar");
+    var config = { attributes: true, childList: true, characterData: true, attributeOldValue: true };
+    [].slice.call(document.getElementsByClassName("tabnav-tab")).forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            //on "Repo" click the event is deattached
+            var observer = new MutationObserver(function (mutations) {
+                mutations.forEach(function (mutation) {
+                    if (mutation.oldValue && mutation.oldValue.indexOf("is-loading") > 0) {
+                        inject();
+                        attachClickInjecter();
+                        observer.disconnect();
+                    }
+                });
+            });
+            observer.observe(pixelBar, config);
+        }, false);
+    });
+}
+
+(function () {
+    inject();
+    attachClickInjecter();
+})();
