@@ -1,0 +1,26 @@
+{   
+    "manifest_version": 2,
+    "name": "__MSG_extensionName__",
+    "uuid": "8c81e8d8-0795-4c81-be48-52db2291faa3",
+    "version": "1.5.0",
+    "description": "__MSG_extensionDescription__",
+    "author": "Naramsim",
+    "license": "MPL 2.0",
+    "keywords": [
+        "jetpack"
+    ],
+    "default_locale": "en",
+    "applications": {
+        "gecko": {
+            "id": "__MSG_extensionName__@mozilla.org",
+            "strict_min_version": "39"
+        }
+    },
+    "content_scripts": [
+        {
+          "matches": ["*://*.github.com/*"],
+          "js": ["data/inject.js"],
+          "css": ["data/inject.css"]
+        }
+    ]
+}

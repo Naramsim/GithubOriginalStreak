@@ -15,12 +15,13 @@ function inject() {
     var lastCommitDate = 0;
     var longestStreakStartingDate = 0;
     var longestStreakEndingDate = 0;
+    var i18nContributions = chrome.i18n.getMessage('i18nContribution');
     if (!!document.getElementById("contributions-calendar")) {
         var couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes;
         if (couple.length === 1) {
-            couple[0].textContent = "Contributions";
+            couple[0].textContent = i18nContributions;
         } else {
-            couple[2].textContent = "Contributions";
+            couple[2].textContent = i18nContributions;
         }
 
         var days = [].slice.call(document.getElementsByClassName("day")).reverse();
@@ -93,7 +94,7 @@ function inject() {
                 currentStreakSkeleton = "<span class=\"text-muted\">" + innerStreak + "</span>";
             }
             var totalSkeleton = "<span class=\"text-muted\">" + monthFrom + " " + dayFrom + " " + yearFrom + " - " + monthTo + " " + dayTo + " " + yearTo + "</span>";
-            var skeleton = "<div class=\"contrib-column contrib-column-first table-column\">\n                    <span class=\"text-muted\">Contributions in the last year</span>\n                    <span class=\"contrib-number\">" + totalContributions + " total</span>\n                    " + totalSkeleton + "\n                </div>\n                <div class=\"contrib-column table-column\">\n                    <span class=\"text-muted\">Longest streak</span>\n                    <span class=\"contrib-number\">" + longestStreak + " days</span>\n                    <span class=\"text-muted\">\n                    " + monthNames[longestStreakStartingDate.getMonth()] + " " + longestStreakStartingDate.getUTCDate() + " –\n                    " + monthNames[longestStreakEndingDate.getMonth()] + " " + longestStreakEndingDate.getUTCDate() + "\n                    </span>\n                </div>\n                <div class=\"contrib-column table-column\">\n                    <span class=\"text-muted\">Current streak</span>\n                    <span class=\"contrib-number\">" + currentStreak + " days</span>\n                    " + currentStreakSkeleton + "\n                </div>";
+            var skeleton = "<div class=\"contrib-column contrib-column-first table-column\">\n                                    <span class=\"text-muted\">" + chrome.i18n.getMessage('i18nFirstBoxUpper') + "</span>\n                                    <span class=\"contrib-number\">" + totalContributions + " " + chrome.i18n.getMessage('i18nFirstBoxMiddle') + "</span>\n                                    " + totalSkeleton + "\n                                </div>\n                                <div class=\"contrib-column table-column\">\n                                    <span class=\"text-muted\">" + chrome.i18n.getMessage('i18nSecondBoxUpper') + "</span>\n                                    <span class=\"contrib-number\">" + longestStreak + " " + chrome.i18n.getMessage('i18nDays') + "</span>\n                                    <span class=\"text-muted\">\n                                    " + monthNames[longestStreakStartingDate.getMonth()] + " " + longestStreakStartingDate.getUTCDate() + " –\n                                    " + monthNames[longestStreakEndingDate.getMonth()] + " " + longestStreakEndingDate.getUTCDate() + "\n                                    </span>\n                                </div>\n                                <div class=\"contrib-column table-column\">\n                                    <span class=\"text-muted\">" + chrome.i18n.getMessage('i18nThirdBoxUpper') + "</span>\n                                    <span class=\"contrib-number\">" + currentStreak + " " + chrome.i18n.getMessage('i18nDays') + "</span>\n                                    " + currentStreakSkeleton + "\n                                </div>";
             var range = document.createRange();
             range.selectNode(document.getElementById("contributions-calendar"));
             var documentFragment = range.createContextualFragment(skeleton);

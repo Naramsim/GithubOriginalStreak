@@ -13,12 +13,13 @@ function inject() {
     let lastCommitDate = 0
     let longestStreakStartingDate = 0
     let longestStreakEndingDate = 0
+    const i18nContributions = chrome.i18n.getMessage('i18nContribution')
     if (!!document.getElementById("contributions-calendar")) {
         let couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if (couple.length === 1) {
-            couple[0].textContent = "Contributions"
+            couple[0].textContent = i18nContributions
         } else {
-            couple[2].textContent = "Contributions"
+            couple[2].textContent = i18nContributions
         }
 
         const days = ([].slice.call(document.getElementsByClassName("day"))).reverse()
@@ -91,24 +92,24 @@ function inject() {
                 currentStreakSkeleton = `<span class="text-muted">${innerStreak}</span>`
             }
             const totalSkeleton = `<span class="text-muted">${monthFrom} ${dayFrom} ${yearFrom} - ${monthTo} ${dayTo} ${yearTo}</span>`
-            const skeleton = `<div class="contrib-column contrib-column-first table-column">
-                    <span class="text-muted">Contributions in the last year</span>
-                    <span class="contrib-number">${totalContributions} total</span>
-                    ${totalSkeleton}
-                </div>
-                <div class="contrib-column table-column">
-                    <span class="text-muted">Longest streak</span>
-                    <span class="contrib-number">${longestStreak} days</span>
-                    <span class="text-muted">
-                    ${monthNames[longestStreakStartingDate.getMonth()]} ${longestStreakStartingDate.getUTCDate()} –
-                    ${monthNames[longestStreakEndingDate.getMonth()]} ${longestStreakEndingDate.getUTCDate()}
-                    </span>
-                </div>
-                <div class="contrib-column table-column">
-                    <span class="text-muted">Current streak</span>
-                    <span class="contrib-number">${currentStreak} days</span>
-                    ${currentStreakSkeleton}
-                </div>`
+            const skeleton =   `<div class="contrib-column contrib-column-first table-column">
+                                    <span class="text-muted">${chrome.i18n.getMessage('i18nFirstBoxUpper')}</span>
+                                    <span class="contrib-number">${totalContributions} ${chrome.i18n.getMessage('i18nFirstBoxMiddle')}</span>
+                                    ${totalSkeleton}
+                                </div>
+                                <div class="contrib-column table-column">
+                                    <span class="text-muted">${chrome.i18n.getMessage('i18nSecondBoxUpper')}</span>
+                                    <span class="contrib-number">${longestStreak} ${chrome.i18n.getMessage('i18nDays')}</span>
+                                    <span class="text-muted">
+                                    ${monthNames[longestStreakStartingDate.getMonth()]} ${longestStreakStartingDate.getUTCDate()} –
+                                    ${monthNames[longestStreakEndingDate.getMonth()]} ${longestStreakEndingDate.getUTCDate()}
+                                    </span>
+                                </div>
+                                <div class="contrib-column table-column">
+                                    <span class="text-muted">${chrome.i18n.getMessage('i18nThirdBoxUpper')}</span>
+                                    <span class="contrib-number">${currentStreak} ${chrome.i18n.getMessage('i18nDays')}</span>
+                                    ${currentStreakSkeleton}
+                                </div>`
             let range = document.createRange()
             range.selectNode(document.getElementById("contributions-calendar"))
             let documentFragment = range.createContextualFragment(skeleton)
