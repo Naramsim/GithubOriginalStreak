@@ -17,8 +17,8 @@ gulp.task('syncCSS', function() {
 			gulp.dest(ff),
 			gulp.dest(chrome)
 		])
-	combined.on('error', console.error.bind(console));
-	return combined;
+	combined.on('error', console.error.bind(console))
+	return combined
 });
 
 gulp.task('syncJS', function() {
@@ -33,8 +33,8 @@ gulp.task('syncJS', function() {
 			gulp.dest(ff),
 			gulp.dest(chrome)
 		])
-	combined.on('error', console.error.bind(console));
-	return combined;
+	combined.on('error', console.error.bind(console))
+	return combined
 });
 
 gulp.task('watch', function() {
