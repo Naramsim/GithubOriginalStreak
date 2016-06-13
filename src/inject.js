@@ -13,6 +13,9 @@ function inject() {
     let lastCommitDate = 0
     let longestStreakStartingDate = 0
     let longestStreakEndingDate = 0
+
+    changeColor()
+    
     if (!!document.getElementById("contributions-calendar")) {
         let couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if (couple.length === 1) {
@@ -134,6 +137,23 @@ function attachClickInjecter() {
             observer.observe(pixelBar, config)
         }, false)
     }))
+}
+
+function changeColor() {
+    const color = localStorage.getItem("blueSky")
+    if(color) {
+        document.querySelectorAll("rect[fill='#eeeeee']").forEach((node)=>{node.style.fill = "#eeeeee"})
+        document.querySelectorAll("rect[fill='#d6e685']").forEach((node)=>{node.style.fill = "#9DC1F6"})
+        document.querySelectorAll("rect[fill='#8cc665']").forEach((node)=>{node.style.fill = "#629DF3"})
+        document.querySelectorAll("rect[fill='#44a340']").forEach((node)=>{node.style.fill = "#2B7BF2"})
+        document.querySelectorAll("rect[fill='#1e6823']").forEach((node)=>{node.style.fill = "#0363F0"})
+
+        document.querySelectorAll("li[style='background-color: #eeeeee']").forEach((node)=>{node.style.backgroundColor = "#eeeeee"})
+        document.querySelectorAll("li[style='background-color: #d6e685']").forEach((node)=>{node.style.backgroundColor = "#9DC1F6"})
+        document.querySelectorAll("li[style='background-color: #8cc665']").forEach((node)=>{node.style.backgroundColor = "#629DF3"})
+        document.querySelectorAll("li[style='background-color: #44a340']").forEach((node)=>{node.style.backgroundColor = "#2B7BF2"})
+        document.querySelectorAll("li[style='background-color: #1e6823']").forEach((node)=>{node.style.backgroundColor = "#0363F0"})
+    }
 }
 
 (function() {
