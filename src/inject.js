@@ -1,5 +1,3 @@
-/*eslint semi: ["error", "never"]*/
-
 function inject() {
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     let totalContributions = 0
@@ -127,7 +125,7 @@ function attachClickInjecter() {
     const config = { attributes: true, childList: true, characterData: true, attributeOldValue: true };
     ([].slice.call(document.getElementsByClassName("tabnav-tab")).forEach((tab) => {
         tab.addEventListener('click', () => { //on "Repo" click the event is deattached
-            var observer = new MutationObserver((mutations) => {
+            const observer = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.oldValue && mutation.oldValue.indexOf("is-loading") > 0 ) {
                         inject()
@@ -154,11 +152,11 @@ function changeColor() {
         [...document.querySelectorAll("li[style='background-color: #d6e685']")].forEach((node)=>{node.style.backgroundColor = "#9DC1F6"});
         [...document.querySelectorAll("li[style='background-color: #8cc665']")].forEach((node)=>{node.style.backgroundColor = "#629DF3"});
         [...document.querySelectorAll("li[style='background-color: #44a340']")].forEach((node)=>{node.style.backgroundColor = "#2B7BF2"});
-        [...document.querySelectorAll("li[style='background-color: #1e6823']")].forEach((node)=>{node.style.backgroundColor = "#0363F0"});
+        [...document.querySelectorAll("li[style='background-color: #1e6823']")].forEach((node)=>{node.style.backgroundColor = "#0363F0"})
     }
 }
 
 (function() {
     inject()
     attachClickInjecter()
-})();
+})()
