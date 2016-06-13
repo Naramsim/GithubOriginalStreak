@@ -1,7 +1,7 @@
 ![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/g48.png) GithubOriginalStreak ![License](https://img.shields.io/badge/License-MPL2.0-yellowgreen.svg)
 ===
 
-[![Join the chat at https://gitter.im/Naramsim/GithubOriginalStreak](https://badges.gitter.im/Naramsim/GithubOriginalStreak.svg)](https://gitter.im/Naramsim/GithubOriginalStreak?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/Naramsim/GithubOriginalStreak](https://badges.gitter.im/Naramsim/GithubOriginalStreak.svg)](https://gitter.im/Naramsim/GithubOriginalStreak?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![bitHound Overall Score](https://www.bithound.io/github/Naramsim/GithubOriginalStreak/badges/score.svg)](https://www.bithound.io/github/Naramsim/GithubOriginalStreak)
 
 Revert GitHub contributions and streak. A browser extension.
 - [x] Total Contributions
