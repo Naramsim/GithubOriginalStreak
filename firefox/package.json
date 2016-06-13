@@ -11,5 +11,8 @@
     "license": "MPL 2.0",
     "keywords": [
         "jetpack"
-    ]
+    ],
+    "permissions": {
+        "multiprocess": true
+    }
 }
