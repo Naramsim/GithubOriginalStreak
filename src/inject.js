@@ -54,7 +54,8 @@ function inject() {
                 const lastCommit = new Date(day.attributes["data-date"].value)
                 const diff = Math.abs((new Date()).getTime() - lastCommit.getTime())
                 let unit = "days"
-                let timeDiff = Math.ceil(diff / (1000 * 3600 * 24))
+                let timeDiff = Math.ceil(diff / (1000 * 3600 * 24)) - 1
+                console.log(timeDiff)
                 if (timeDiff === 1) {
                     unit = "day"
                 }
