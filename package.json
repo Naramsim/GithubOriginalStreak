@@ -1,11 +1,17 @@
 {
   "name": "github-original-streak",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Get back longest and current streak on Github prifiles",
-  "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .; exit 0"
+    "lint": "eslint .; exit 0",
+    "install": "npm i -g babel-cli watch jpm",
+    "clean": "find build -regextype posix-egrep -regex \".*\\.(zip|xpi|nex)$\" -type f -delete && rmdir build",
+    "build:js": "babel ./src/inject.js --presets es2015 | tee ./firefox/data/inject.js > ./chrome/src/inject/inject.js ",
+    "build:css": "echo ./firefox/data/ ./chrome/src/inject/ | xargs -n 1 cp ./src/inject.css",
+    "build": "npm run build:js && npm run build:css",
+    "build:watch": "watch \"npm run build\" ./src/",
+    "package": " mkdir -p build && cd ./firefox && jpm xpi && mv *.xpi ../build && cd .. && zip -r ./build/chrome.zip ./chrome && cd ./build && cp chrome.zip chrome.nex"
   },
   "repository": {
     "type": "git",
@@ -25,9 +31,6 @@
   "devDependencies": {
     "babel-preset-es2015": "^6.9.0",
     "eslint": "^2.12.0",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-newer": "^1.1.0",
-    "stream-combiner2": "^1.1.1"
+    "watch": "^0.18.0"
   }
 }

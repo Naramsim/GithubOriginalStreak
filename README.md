@@ -17,14 +17,26 @@ For downloading the extensions just click on the badges above, they will bring y
 
 ![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/streak.jpg)
 
-#### Build
+#### Build and watch
 
 Be sure to work on `./src` files.
 
 ```shell
 git clone https://github.com/Naramsim/GithubOriginalStreak.git
-npm install
-gulp watch
+npm install && npm run install
+npm run build:watch
+```
+
+#### Package all the extensions
+```shell
+npm run package
+# after submission
+npm run clean
+```
+
+#### Check syntax
+```shell
+npm run lint
 ```
 
 #### Contributors

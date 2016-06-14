@@ -156,3 +156,4 @@ function changeColor() {
     inject();
     attachClickInjecter();
 })();
+
