@@ -24,11 +24,8 @@
       ],
       "all_frames": false,
       "run_at": "document_end",
-      "css": [
-        "src/inject/inject.css"
-      ],
       "js": [
-        "src/inject/inject.js"
+        "src/inject.js"
       ]
     }
   ]

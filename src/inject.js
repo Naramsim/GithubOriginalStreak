@@ -14,8 +14,6 @@ function inject() {
     let longestStreakStartingDate = 0
     let longestStreakEndingDate = 0
 
-    changeColor()
-
     if (!!document.getElementById("contributions-calendar")) {
         let couple = document.getElementById("contributions-calendar").previousElementSibling.childNodes
         if (couple.length === 1) {
@@ -121,50 +119,4 @@ function inject() {
     }
 }
 
-function attachClickInjecter() {
-    let pixelBar = document.getElementById("js-pjax-loader-bar")
-    const config = { attributes: true, childList: true, characterData: true, attributeOldValue: true };
-    ([].slice.call(document.getElementsByClassName("tabnav-tab")).forEach((tab) => {
-        tab.addEventListener('click', () => { //on "Repo" click the event is deattached
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    if (mutation.oldValue && mutation.oldValue.indexOf("is-loading") > 0 ) {
-                        inject()
-                        attachClickInjecter()
-                        observer.disconnect()
-                    }
-                })
-            })
-            observer.observe(pixelBar, config)
-        }, false)
-    }))
-}
-
-function updateStyle(selector, property, value) {
-    [...document.querySelectorAll(selector)].forEach((node)=> {
-        node.style[property] = value
-    })
-}
-
-function changeColor() {
-    const color = localStorage.getItem("blueSky")
-    const colorsHash = {
-        "eeeeee": "eeeeee",
-        "d6e685": "9DC1F6",
-        "8cc665": "629DF3",
-        "44a340": "2B7BF2",
-        "1e6823": "0363F0"
-    }
-
-    if(color) {
-        Object.keys(colorsHash).forEach((key) => {
-            updateStyle(`rect[fill='#${key}']`, "fill", `#${colorsHash[key]}`)
-            updateStyle(`li[style='background-color: #${key}']`, "backgroundColor", `#${colorsHash[key]}`)
-        })
-    }
-}
-
-(function() {
-    inject()
-    attachClickInjecter()
-})()
+module.exports = inject
