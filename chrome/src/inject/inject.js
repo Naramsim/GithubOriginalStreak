@@ -127,39 +127,26 @@ function attachClickInjecter() {
     });
 }
 
+function updateStyle(selector, property, value) {
+    [].concat(_toConsumableArray(document.querySelectorAll(selector))).forEach(function (node) {
+        node.style[property] = value;
+    });
+}
+
 function changeColor() {
     var color = localStorage.getItem("blueSky");
-    if (color) {
-        [].concat(_toConsumableArray(document.querySelectorAll("rect[fill='#eeeeee']"))).forEach(function (node) {
-            node.style.fill = "#eeeeee";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("rect[fill='#d6e685']"))).forEach(function (node) {
-            node.style.fill = "#9DC1F6";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("rect[fill='#8cc665']"))).forEach(function (node) {
-            node.style.fill = "#629DF3";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("rect[fill='#44a340']"))).forEach(function (node) {
-            node.style.fill = "#2B7BF2";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("rect[fill='#1e6823']"))).forEach(function (node) {
-            node.style.fill = "#0363F0";
-        });
+    var colorsHash = {
+        "eeeeee": "eeeeee",
+        "d6e685": "9DC1F6",
+        "8cc665": "629DF3",
+        "44a340": "2B7BF2",
+        "1e6823": "0363F0"
+    };
 
-        [].concat(_toConsumableArray(document.querySelectorAll("li[style='background-color: #eeeeee']"))).forEach(function (node) {
-            node.style.backgroundColor = "#eeeeee";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("li[style='background-color: #d6e685']"))).forEach(function (node) {
-            node.style.backgroundColor = "#9DC1F6";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("li[style='background-color: #8cc665']"))).forEach(function (node) {
-            node.style.backgroundColor = "#629DF3";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("li[style='background-color: #44a340']"))).forEach(function (node) {
-            node.style.backgroundColor = "#2B7BF2";
-        });
-        [].concat(_toConsumableArray(document.querySelectorAll("li[style='background-color: #1e6823']"))).forEach(function (node) {
-            node.style.backgroundColor = "#0363F0";
+    if (color) {
+        Object.keys(colorsHash).forEach(function (key) {
+            updateStyle("rect[fill='#" + key + "']", "fill", "#" + colorsHash[key]);
+            updateStyle("li[style='background-color: #" + key + "']", "backgroundColor", "#" + colorsHash[key]);
         });
     }
 }
