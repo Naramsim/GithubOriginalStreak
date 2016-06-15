@@ -23,15 +23,15 @@ Be sure to work on `./src` files.
 
 ```shell
 git clone https://github.com/Naramsim/GithubOriginalStreak.git
-npm install && npm run install
+npm install
 npm run build:watch
 ```
 
 #### Package all the extensions
 ```shell
+npm run build
 npm run package
 # after submission
-npm run clean
 ```
 
 #### Check syntax
@@ -43,4 +43,5 @@ npm run lint
 [Naramsim](https://github.com/Naramsim) and [sarbbottam](https://github.com/sarbbottam)
 
 ##### Do you want a fancy?
+
 `localStorage.setItem("blueSky", 1)` then reload
