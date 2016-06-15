@@ -51,4 +51,5 @@ node_modules
 .xpi
 .nex
 build
--p
+chrome/src/
+firefox/data
