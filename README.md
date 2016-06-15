@@ -36,7 +36,7 @@ npm run package
 
 #### Check syntax
 ```shell
-npm run lint
+npm run test
 ```
 
 #### Contributors

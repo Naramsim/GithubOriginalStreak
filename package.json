@@ -3,8 +3,7 @@
   "version": "0.9.0",
   "description": "Get back longest and current streak on Github prifiles",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
+    "test": "eslint .",
     "prebuild": "npm run lint && rimraf chrome/src/ firefox/data/ build",
     "build": "webpack",
     "build:watch": "webpack --watch",
