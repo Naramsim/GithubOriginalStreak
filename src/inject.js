@@ -28,24 +28,15 @@ function getLastContributionText(contributionDate) {
 }
 
 function getStreakHTML(data) {
-    // should be loopable
-    return `
-    <div class="contrib-column contrib-column-first table-column">
-        <span class="text-muted">Contributions in the last year</span>
-        <span class="contrib-number">${data.totalContributions} total</span>
-        <span class="text-muted">${data.totalContributionsText}</span>
-    </div>
-    <div class="contrib-column table-column">
-        <span class="text-muted">Longest streak</span>
-        <span class="contrib-number">${data.longestStreak} days</span>
-        <span class="text-muted">${data.longestStreakText}</span>
-    </div>
-    <div class="contrib-column table-column">
-        <span class="text-muted">Current streak</span>
-        <span class="contrib-number">${data.currentStreak} days</span>
-        <span class="text-muted">${data.currentStreakText}</span>
-    </div>
-    `
+    return data.map( (item, index) => {
+        return `
+        <div class="contrib-column table-column ${index === 0 ? 'contrib-column-first' : ''}">
+            <span class="text-muted">${item[0]}</span>
+            <span class="contrib-number">${item[1]}</span>
+            <span class="text-muted">${item[2]}</span>
+        </div>
+        `
+    }).join("\n")
 }
 
 function inject() {
@@ -132,22 +123,25 @@ function inject() {
             longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate)
             totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate)
 
-            const data = {
-                // total contribution
-                totalContributions: totalContributions,
-                totalContributionsText: totalContributionsText,
-                // longest streak
-                longestStreak: longestStreak,
-                longestStreakText: longestStreakText,
-                // current streak
-                currentStreak: currentStreak,
-                currentStreakText: currentStreakText
-            }
+            const data = [
+                [
+                    "Contributions in the last year",
+                    `${totalContributions} total`,
+                    totalContributionsText
+                ], [
+                    "Longest streak",
+                    `${longestStreak} days`,
+                    longestStreakText
+                ], [
+                    "Current streak",
+                    `${currentStreak} days`,
+                    currentStreakText
+                ]
+            ]
 
-            const range = document.createRange()
-            range.selectNode(contributionsCalendar)
-            const documentFragment = range.createContextualFragment(getStreakHTML(data))
-            contributionsCalendar.appendChild(documentFragment)
+            const container = document.createElement("div")
+            container.innerHTML = getStreakHTML(data)
+            contributionsCalendar.appendChild(container)
         }
     }
 }
