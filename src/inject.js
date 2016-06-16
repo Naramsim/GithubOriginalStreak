@@ -114,6 +114,11 @@ function inject() {
         })
 
         if (firstContributionDate) {
+            // if isCurrentStreak is not false
+            // then the getCurrentStreakText w.r.t firstContributionDate
+            if (isCurrentStreak) {
+                currentStreakText = getCurrentStreakText(firstContributionDate)
+            }
             // if currentStreakText is empty
             // set currentStreak as lastContributionText
             if (!currentStreakText) {
