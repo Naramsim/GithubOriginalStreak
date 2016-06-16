@@ -3,8 +3,8 @@
   "version": "0.9.0",
   "description": "Get back longest and current streak on Github prifiles",
   "scripts": {
-    "test": "eslint .",
-    "prebuild": "npm run lint && rimraf chrome/src/ firefox/data/ build",
+    "test": "xo",
+    "prebuild": "npm run test && rimraf chrome/src/ firefox/data/ build",
     "build": "webpack",
     "build:watch": "webpack --watch",
     "package": " mkdir -p build && cd ./firefox && jpm xpi && mv *.xpi ../build && cd .. && zip -r ./build/chrome.zip ./chrome && cd ./build && cp chrome.zip chrome.nex"
@@ -34,6 +34,18 @@
     "moment": "^2.13.0",
     "rimraf": "^2.5.2",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.1"
+    "webpack": "^1.13.1",
+    "xo": "^0.16.0"
+  },
+  "xo": {
+    "envs": [
+      "browser"
+    ],
+    "ignores": [
+      "chrome/**/*",
+      "firefox/**/*"
+    ],
+    "esnext": true,
+    "space": 4
   }
 }
