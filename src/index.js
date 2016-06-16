@@ -1,13 +1,13 @@
-require('./index.css')
-const inject = require('./inject')
-const changeColor = require('./change-color')
+require('./index.css');
+const inject = require('./inject');
+const changeColor = require('./change-color');
 
 // invoke inject function
-inject()
+inject();
 // invoke changeColor function
-changeColor()
+changeColor();
 // attach click handler to navs
-attachNavClickHandler()
+attachNavClickHandler();
 
 function navClickHandler() {
     /**
@@ -15,29 +15,32 @@ function navClickHandler() {
      * and invoke inject function
      * to inject github streak container
      */
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.oldValue && mutation.oldValue.indexOf("is-loading") > -1 ) {
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.oldValue && mutation.oldValue.indexOf('is-loading') > -1) {
                 // stop observing
-                observer.disconnect()
+                observer.disconnect();
                 // invoke inject function
-                inject()
+                inject();
                 // invoke changeColor function
-                changeColor()
+                changeColor();
                 // attach clickHandler to nav as it has been detached
-                attachNavClickHandler()
+                attachNavClickHandler();
             }
-        })
-    })
+        });
+    });
     /**
      * observe pjaxLoaderBar for changes in attributes
      */
-    const pjaxLoaderBar = document.getElementById("js-pjax-loader-bar")
-    const config = { attributes: true, attributeOldValue: true }
-    observer.observe(pjaxLoaderBar, config)
+    const pjaxLoaderBar = document.getElementById('js-pjax-loader-bar');
+    const config = {
+        attributes: true,
+        attributeOldValue: true
+    };
+    observer.observe(pjaxLoaderBar, config);
 }
 
 function attachNavClickHandler() {
-    document.querySelector("nav").addEventListener('click', navClickHandler, false)
+    document.querySelector('nav').addEventListener('click', navClickHandler, false);
 }
 

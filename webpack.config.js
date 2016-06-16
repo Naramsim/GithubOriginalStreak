@@ -2,7 +2,7 @@ module.exports = {
     devtool: 'source-map',
     entry: {
         'chrome/src/inject': './src/index.js',
-        'firefox/data/inject': './src/index.js',
+        'firefox/data/inject': './src/index.js'
     },
     output: {
         libraryTarget: 'umd',
@@ -13,7 +13,7 @@ module.exports = {
         loaders: [
             {
                 test: /\.css$/,
-                loader: "style!css"
+                loader: 'style!css'
             },
             {
                 test: /\.jsx?$/,
@@ -22,4 +22,4 @@ module.exports = {
             }
         ]
     }
-}
+};
