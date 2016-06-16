@@ -1,5 +1,4 @@
-// would not be required with moment.js
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+const moment = require('moment')
 
 function updateContributionsHeading(contributionsCalendar) {
     const contributionsHeadingContainer = contributionsCalendar.previousElementSibling.childNodes
@@ -14,59 +13,18 @@ function updateContributionsHeading(contributionsCalendar) {
 }
 
 function getTotalContributionsText(firstContributionDate, lastContributionDate) {
-    // use moment.js to easy this computation
-    const dayFrom = firstContributionDate.getUTCDate()
-    const monthFrom = monthNames[firstContributionDate.getMonth()]
-    const yearFrom = firstContributionDate.getFullYear()
-    const dayTo = lastContributionDate.getUTCDate()
-    const monthTo = monthNames[lastContributionDate.getMonth()]
-    const yearTo = lastContributionDate.getFullYear()
-    const totalContributions = totalContributions
-    const totalContributionsText = totalContributionsText
-
-    return `${monthFrom} ${dayFrom} ${yearFrom} - ${monthTo} ${dayTo} ${yearTo}`
+    return `${moment(firstContributionDate).format("MMM D YYYY")} - ${moment(lastContributionDate).format("MMM D YYYY")}`
 }
 function getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate) {
-    // use moment.js to easy this computation
-    return `
-        ${monthNames[longestStreakStartingDate.getMonth()]} ${longestStreakStartingDate.getUTCDate()} –
-        ${monthNames[longestStreakEndingDate.getMonth()]} ${longestStreakEndingDate.getUTCDate()}
-    `
+    return `${moment(longestStreakStartingDate).format('MMM D')} - ${moment(longestStreakEndingDate).format('MMM D')}`
 }
 
 function getCurrentStreakText(contributionDate) {
-    // use moment.js to easy this computation
-    const dateFrom = new Date(contributionDate)
-    const dayFrom = dateFrom.getUTCDate() + 1
-    const monthFrom = monthNames[dateFrom.getMonth()]
-
-    const dateTo = new Date()
-    const dayTo = dateTo.getUTCDate()
-    const monthTo = monthNames[dateTo.getMonth()]
-
-    return `${dayFrom} ${monthFrom} - ${dayTo} ${monthTo}`
+    return contributionDate ? `${moment(contributionDate).format('MMM D')} - ${moment().format('MMM D')}` : ''
 }
 
 function getLastContributionText(contributionDate) {
-    // use moment.js to easy this computation
-    const lastContributionDate = new Date(contributionDate)
-    const diff = Math.abs((new Date()).getTime() - lastContributionDate.getTime())
-    let unit = "days"
-    let timeDiff = Math.ceil(diff / (1000 * 3600 * 24)) - 1
-
-    if (timeDiff === 1) {
-        unit = "day"
-    }
-
-    if (timeDiff > 30) {
-        unit = "month"
-        if (timeDiff > 60) {
-            unit = "months"
-        }
-        timeDiff = (new Date()).getMonth() - lastContributionDate.getMonth() + (12 * ((new Date()).getFullYear() - lastContributionDate.getFullYear()))
-    }
-
-    return `Last contributed <time>${timeDiff} ${unit} ago</time>`
+    return `Last contributed <time>${moment(contributionDate).fromNow(true)} ago</time>`
 }
 
 function getStreakHTML(data) {
@@ -92,13 +50,12 @@ function getStreakHTML(data) {
 
 function inject() {
     let totalContributions = 0
+
     let currentStreak = 0
     let longestStreak = 0
     let currentLongestStreak = 0
-    let nonContributingStreak = 0
 
-    // find a better name, stop what?
-    let stop = 0
+    let isCurrentStreak = true
 
     let totalContributionsText = ""
     let longestStreakText = ""
@@ -114,18 +71,20 @@ function inject() {
 
     if (!!contributionsCalendar) {
         updateContributionsHeading(contributionsCalendar)
-        const days = Array.from(document.getElementsByClassName("day")).reverse()
 
+        const days = Array.from(document.getElementsByClassName("day")).reverse()
+        // for each day from last day (current day) to first available day
         days.forEach((day) => {
             const contributionCount = +day.attributes["data-count"].value
             const contributionDate = day.attributes["data-date"].value
 
             if (contributionCount) {
                 totalContributions += contributionCount
-                firstContributionDate = new Date(contributionDate)
+                firstContributionDate = contributionDate
 
+                // dont update lastContributionDate once it is set
                 if (!lastContributionDate) {
-                    lastContributionDate = new Date(contributionDate)
+                    lastContributionDate = contributionDate
                 }
 
                 currentLongestStreak += 1
@@ -133,32 +92,43 @@ function inject() {
                 currentLongestStreak = 0
             }
 
+            // when ever currentLongestStreak is more than longestStreak
+            // set longestStreak to currentLongestStreak
             if (currentLongestStreak > longestStreak) {
-                // use moment.js to easy this computation
                 longestStreak = currentLongestStreak
-                longestStreakStartingDate = new Date(contributionDate)
-                longestStreakEndingDate = new Date(contributionDate)
-                longestStreakEndingDate.setDate(longestStreakEndingDate.getDate() + longestStreak - 1)
+                // since the day array is reversed
+                // longestStreakStartingDate is set to contributionDate
+                longestStreakStartingDate = contributionDate
+                // and longestStreakEndingDate is calculated as longestStreakStartingDate + longestStreak days
+                longestStreakEndingDate = moment(contributionDate).add(longestStreak - 1, "days")
             }
 
-            if (contributionCount && !stop) {
+            if (contributionCount && isCurrentStreak) {
                 currentStreak += 1
-            } else {
-                nonContributingStreak += 1
-                if (stop === 0) {
-                    currentStreakText = getCurrentStreakText(contributionDate)
-                    stop = 1
-                }
+            } else if (isCurrentStreak) {
+                // since contributionCount is 0
+                // end currentStreak and
+                // set isCurrentStreak to false
+                currentStreakText = getCurrentStreakText(firstContributionDate)
+                isCurrentStreak = false
             }
 
-            if (!currentStreak && nonContributingStreak > 1 && contributionCount && !lastContributionText) {
+            // if lastContributionDate is not empty
+            // but not currentStreak and lastContributionText is empty
+            // implies contributionDate is the lastContributionDate
+            if (lastContributionDate && !isCurrentStreak && !lastContributionText) {
                 lastContributionText = getLastContributionText(contributionDate)
             }
 
         })
 
         if (firstContributionDate) {
-            currentStreakText = lastContributionText ? lastContributionText : currentStreakText
+            // if currentStreakText is empty
+            // set currentStreak as lastContributionText
+            if (!currentStreakText) {
+                currentStreakText = lastContributionText
+            }
+
             longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate)
             totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate)
 
