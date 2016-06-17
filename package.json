@@ -3,6 +3,7 @@
   "version": "0.9.0",
   "description": "Get back longest and current streak on Github prifiles",
   "scripts": {
+    "commit": "git-cz",
     "test": "xo",
     "prebuild": "npm run test && rimraf chrome/src/ firefox/data/ build",
     "build": "webpack",
@@ -28,7 +29,9 @@
     "babel-core": "^6.9.1",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.9.0",
+    "commitizen": "^2.8.2",
     "css-loader": "^0.23.1",
+    "cz-conventional-changelog": "^1.1.6",
     "eslint": "^2.12.0",
     "jpm": "^1.0.7",
     "moment": "^2.13.0",
@@ -47,5 +50,10 @@
     ],
     "esnext": true,
     "space": 4
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
