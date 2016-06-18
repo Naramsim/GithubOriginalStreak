@@ -1,11 +1,11 @@
 require('./index.css');
 const inject = require('./inject');
-const changeColor = require('./change-color');
+const changeContributionsColor = require('./change-color');
 
 // invoke inject function
 inject();
 // invoke changeColor function
-changeColor();
+changeContributionsColor();
 // attach click handler to navs
 attachNavClickHandler();
 
@@ -23,7 +23,7 @@ function navClickHandler() {
                 // invoke inject function
                 inject();
                 // invoke changeColor function
-                changeColor();
+                changeContributionsColor();
                 // attach clickHandler to nav as it has been detached
                 attachNavClickHandler();
             }
@@ -43,4 +43,3 @@ function navClickHandler() {
 function attachNavClickHandler() {
     document.querySelector('nav').addEventListener('click', navClickHandler, false);
 }
-
