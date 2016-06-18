@@ -26,7 +26,7 @@ function changeContributionsColor() {
 
     if (color && colorSchemes[color]) {
         Object.keys(colorSchemes[color]).forEach(key => {
-            let currentColorScheme = colorSchemes[color];
+            const currentColorScheme = colorSchemes[color];
             updateStyle(`rect[fill='#${key}']`, 'fill', `#${currentColorScheme[key]}`);
             updateStyle(`li[style='background-color: #${key}']`, 'backgroundColor', `#${currentColorScheme[key]}`);
         });
