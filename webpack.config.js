@@ -1,3 +1,4 @@
+var webpack = require("webpack");
 module.exports = {
     devtool: 'source-map',
     entry: {
@@ -21,5 +22,8 @@ module.exports = {
                 loader: 'babel?presets[]=es2015'
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.ContextReplacementPlugin(/moment[\\\/]locale$/, /^\.\/(en)$/)
+    ]
 };
