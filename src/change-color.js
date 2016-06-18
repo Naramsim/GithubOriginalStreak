@@ -6,8 +6,8 @@ function updateStyle(selector, property, value) {
 }
 
 function changeContributionsColor() {
-    const color = localStorage.getItem('color-scheme');
-    const colorScheme = {
+    const color = localStorage.getItem('colorScheme');
+    const colorSchemes = {
         'blue-sky': {
             'eeeeee': 'eeeeee',
             'd6e685': '9DC1F6',
@@ -24,10 +24,11 @@ function changeContributionsColor() {
         }
     };
 
-    if (color && (color in colorScheme)) {
-        Object.keys(colorScheme[color]).forEach(key => {
-            updateStyle(`rect[fill='#${key}']`, 'fill', `#${colorScheme[color][key]}`);
-            updateStyle(`li[style='background-color: #${key}']`, 'backgroundColor', `#${colorScheme[color][key]}`);
+    if (color && colorSchemes[color]) {
+        Object.keys(colorSchemes[color]).forEach(key => {
+            let currentColorScheme = colorSchemes[color];
+            updateStyle(`rect[fill='#${key}']`, 'fill', `#${currentColorScheme[key]}`);
+            updateStyle(`li[style='background-color: #${key}']`, 'backgroundColor', `#${currentColorScheme[key]}`);
         });
     }
 }

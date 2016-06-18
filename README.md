@@ -27,4 +27,4 @@ Please refer [Contributing guidelines](contributing.md) to enhance your contribu
 
 ## Do you want a fancy?
 
-`localStorage.setItem("blueSky", 1)` then reload
+`localStorage.setItem('colorScheme', 'blue-sky')` then reload
