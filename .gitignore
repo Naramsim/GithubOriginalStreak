@@ -53,3 +53,10 @@ node_modules
 build
 chrome/src/
 firefox/data
+
+# Logs and databases #
+######################
+logs
+*.log
+*.sql
+*.sqlite
