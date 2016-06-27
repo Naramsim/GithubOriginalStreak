@@ -24,7 +24,7 @@ function getCurrentStreakText(contributionDate) {
 }
 
 function getLastContributionText(contributionDate) {
-    return `Last contributed <time>${moment(contributionDate).fromNow(true)} ago</time>`;
+    return `Last contributed <time>${moment(contributionDate).add(1, 'days').fromNow(true)} ago</time>`;
 }
 
 function getStreakHTML(data) {
