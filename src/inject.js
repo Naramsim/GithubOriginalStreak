@@ -1,6 +1,8 @@
 const moment = require('moment');
 const store = require('./store');
 
+const now = moment();
+
 function updateContributionsHeading(contributionsCalendar) {
     const contributionsHeadingContainer = contributionsCalendar.previousElementSibling.childNodes;
     let contributionsHeading;
@@ -16,12 +18,12 @@ function updateContributionsHeading(contributionsCalendar) {
 function getTotalContributionsText(firstContributionDate, lastContributionDate) {
     return `${moment(firstContributionDate).format('MMM D YYYY')} - ${moment(lastContributionDate).format('MMM D YYYY')}`;
 }
-function getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate) {
-    return `${moment(longestStreakStartingDate).format('MMM D')} - ${moment(longestStreakEndingDate).format('MMM D')}`;
+function getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate, format = 'MMM D') {
+    return `${moment(longestStreakStartingDate).format(format)} - ${moment(longestStreakEndingDate).format(format)}`;
 }
 
-function getCurrentStreakText(contributionDate) {
-    return contributionDate ? `${moment(contributionDate).format('MMM D')} - ${moment().format('MMM D')}` : '';
+function getCurrentStreakText(contributionDate, format = 'MMM D') {
+    return contributionDate ? `${moment(contributionDate).format(format)} - ${now.format(format)}` : '';
 }
 
 function getLastContributionText(contributionDate) {
@@ -47,7 +49,10 @@ function inject() {
     let longestStreak = 0;
     let currentLongestStreak = 0;
 
+    let nonContributingDays = 0;
+
     let isCurrentStreak = true;
+    let initialStreakDateGivenByUser = false;
 
     let totalContributionsText = '';
     let longestStreakText = '';
@@ -60,130 +65,170 @@ function inject() {
     let longestStreakEndingDate = '';
 
     const contributionsCalendar = document.getElementById('contributions-calendar');
+    const currentProfile = document.getElementsByClassName('vcard-username')[0].textContent;
+    const days = Array.from(document.getElementsByClassName('day')).reverse();
 
-    let initialStreakDateGivenByUser = false;
+    if (contributionsCalendar && currentProfile) {
+        parse();
 
-    if (contributionsCalendar) {
-        const currentProfile = document.getElementsByClassName('vcard-username')[0].textContent;
-
-        let parse =
-            new Promise((resolve, reject) => {
-                updateContributionsHeading(contributionsCalendar);
-
-                const days = Array.from(document.getElementsByClassName('day')).reverse();
-                // for each day from last day (current day) to first available day
-                days.forEach(day => {
-                    const contributionCount = parseInt(day.attributes['data-count'].value, 10);
-                    const contributionDate = day.attributes['data-date'].value;
-
-                    if (contributionCount) {
-                        totalContributions += contributionCount;
-                        firstContributionDate = contributionDate;
-
-                        // dont update lastContributionDate once it is set
-                        if (!lastContributionDate) {
-                            lastContributionDate = contributionDate;
-                        }
-
-                        currentLongestStreak += 1;
+        // if probably has a full calendar
+        // retrieve custom start streak date
+        if (nonContributingDays <= 1) {
+            // invoke and wait data retrieval
+            Promise.all([store.get].map(p => p.catch(err => err)))
+                .then(results => {
+                    const profileData = results[0].files[currentProfile];
+                    if (profileData) {
+                        initialStreakDateGivenByUser = profileData.content;
                     } else {
-                        currentLongestStreak = 0;
+                        initialStreakDateGivenByUser = false;
                     }
-
-                    // when ever currentLongestStreak is more than longestStreak
-                    // set longestStreak to currentLongestStreak
-                    if (currentLongestStreak > longestStreak) {
-                        longestStreak = currentLongestStreak;
-                        // since the day array is reversed
-                        // longestStreakStartingDate is set to contributionDate
-                        longestStreakStartingDate = contributionDate;
-                        // and longestStreakEndingDate is calculated as longestStreakStartingDate + longestStreak days
-                        longestStreakEndingDate = moment(contributionDate).add(longestStreak - 1, 'days');
-                    }
-
-                    if (contributionCount && isCurrentStreak) {
-                        currentStreak += 1;
-                    } else if (isCurrentStreak) {
-                        // since contributionCount is 0
-                        // end currentStreak and
-                        // set isCurrentStreak to false
-                        currentStreakText = getCurrentStreakText(firstContributionDate);
-                        isCurrentStreak = false;
-                    }
-
-                    // if lastContributionDate is not empty
-                    // but not currentStreak and lastContributionText is empty
-                    // implies contributionDate is the lastContributionDate
-                    if (lastContributionDate && !isCurrentStreak && !lastContributionText) {
-                        lastContributionText = getLastContributionText(contributionDate);
-                    }
+                    build();
                 });
-                resolve();
-            });
+        } else {
+            build();
+        }
+    }
 
-        Promise.all([parse, store.get].map(p => p.catch(e => e)))
-            .then(results => {
-                const profileData = results[1].files[currentProfile];
-                if (profileData) {
-                    initialStreakDateGivenByUser = profileData.content;
-                } else {
-                    initialStreakDateGivenByUser = false;
+    function parse() {
+        updateContributionsHeading(contributionsCalendar);
+
+        // for each day from last day (current day) to first available day
+        days.forEach(day => {
+            const contributionCount = parseInt(day.attributes['data-count'].value, 10);
+            const contributionDate = day.attributes['data-date'].value;
+
+            if (contributionCount) {
+                totalContributions += contributionCount;
+                firstContributionDate = contributionDate;
+
+                // dont update lastContributionDate once it is set
+                if (!lastContributionDate) {
+                    lastContributionDate = contributionDate;
                 }
-                build();
-            })
-            .catch(e => console.log(e));
 
+                currentLongestStreak += 1;
+            } else {
+                currentLongestStreak = 0;
+                nonContributingDays += 1;
+            }
 
-        function build() {
-            if (currentStreak === 367) { //366?
-                if (initialStreakDateGivenByUser) {
-                    const now = moment();
-                    currentStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days');
-                    firstContributionDate = initialStreakDateGivenByUser;
-                } else {
-                    //const loginAs = document.querySelectorAll('.dropdown-header>.css-truncate-target')[0].textContent;
-                    const currentProfile = document.getElementsByClassName('vcard-username')[0].textContent;
-                    if (currentProfile) { //check? or do it for everyone?
-                        store.set(currentProfile, firstContributionDate)
-                    }
+            // when ever currentLongestStreak is more than longestStreak
+            // set longestStreak to currentLongestStreak
+            if (currentLongestStreak > longestStreak) {
+                longestStreak = currentLongestStreak;
+                // since the day array is reversed
+                // longestStreakStartingDate is set to contributionDate
+                longestStreakStartingDate = contributionDate;
+                // and longestStreakEndingDate is calculated as longestStreakStartingDate + longestStreak days
+                longestStreakEndingDate = moment(contributionDate).add(longestStreak - 1, 'days');
+            }
+
+            if (contributionCount && isCurrentStreak) {
+                currentStreak += 1;
+            } else if (isCurrentStreak) {
+                // since contributionCount is 0
+                // end currentStreak and
+                // set isCurrentStreak to false
+                currentStreakText = getCurrentStreakText(firstContributionDate);
+                isCurrentStreak = false;
+            }
+
+            // if lastContributionDate is not empty
+            // but not currentStreak and lastContributionText is empty
+            // implies contributionDate is the lastContributionDate
+            if (lastContributionDate && !isCurrentStreak && !lastContributionText) {
+                lastContributionText = getLastContributionText(contributionDate);
+            }
+        });
+    }
+
+    function build() {
+        const noContributionToday = days[0].attributes['data-count'].value === 0;
+        const fullCalendar = nonContributingDays === 0;
+        const fullCalendarApartToday = nonContributingDays === 1 && noContributionToday;
+
+        // if has submitted a custom start streak date
+        // and the calendar is full
+        if (initialStreakDateGivenByUser && fullCalendar) {
+            // update current streak
+            currentStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days');
+            firstContributionDate = initialStreakDateGivenByUser;
+        }
+
+        // if has submitted a custom start streak date
+        // and  the calendar is full
+        //      or the user hasn'n committed anything today (but the calendar is full)
+        if (initialStreakDateGivenByUser && (fullCalendar || fullCalendarApartToday)) {
+            // update longest streak
+            longestStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days') - nonContributingDays;
+            longestStreakStartingDate = initialStreakDateGivenByUser;
+        }
+
+        // if the calendar is full
+        // of the user hasn'n committed anything today (but the calendar is full)
+        if (fullCalendar || fullCalendarApartToday) {
+            // if the user hasn't set a custom start date
+            if (!initialStreakDateGivenByUser) {
+                if (currentProfile) {
+                    // set today as the start streak date
+                    store.set(currentProfile, firstContributionDate);
                 }
             }
 
-            if (firstContributionDate) {
-                // if isCurrentStreak is not false
-                // then the getCurrentStreakText w.r.t firstContributionDate
-                if (isCurrentStreak) {
+        // if user set a custom start streak date
+        // but the calendar is no more full
+        // thus he ended his streak
+        } else if (initialStreakDateGivenByUser) {
+            // delete custom start streak date
+            store.del(currentProfile);
+        }
+
+        // if has submitted a custom start streak date
+        if (firstContributionDate) {
+            // if isCurrentStreak is not false
+            // then the getCurrentStreakText w.r.t firstContributionDate
+            if (isCurrentStreak) {
+                if (currentStreak < 365) {
                     currentStreakText = getCurrentStreakText(firstContributionDate);
+                } else {
+                    currentStreakText = getCurrentStreakText(firstContributionDate, 'MMM D YYYY');
                 }
-                // if currentStreakText is empty
-                // set currentStreak as lastContributionText
-                if (!currentStreakText) {
-                    currentStreakText = lastContributionText;
-                }
-
-                longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate);
-                totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate);
-
-                const data = [
-                    [
-                        'Contributions in the last year',
-                        `${totalContributions} total`,
-                        totalContributionsText
-                    ], [
-                        'Longest streak',
-                        `${longestStreak} days`,
-                        longestStreakText
-                    ], [
-                        'Current streak',
-                        `${currentStreak} days`,
-                        currentStreakText
-                    ]
-                ];
-
-                const container = document.createElement('div');
-                container.innerHTML = getStreakHTML(data);
-                contributionsCalendar.appendChild(container);
             }
+
+            // if currentStreakText is empty
+            // set currentStreak as lastContributionText
+            if (!currentStreakText) {
+                currentStreakText = lastContributionText;
+            }
+
+            if (currentStreak < 365) {
+                longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate);
+            } else {
+                longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate, 'MMM D YYYY');
+            }
+
+            totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate);
+
+            const data = [
+                [
+                    'Contributions in the last year',
+                    `${totalContributions} total`,
+                    totalContributionsText
+                ], [
+                    'Longest streak',
+                    `${longestStreak} days`,
+                    longestStreakText
+                ], [
+                    'Current streak',
+                    `${currentStreak} days`,
+                    currentStreakText
+                ]
+            ];
+
+            const container = document.createElement('div');
+            container.innerHTML = getStreakHTML(data);
+            contributionsCalendar.appendChild(container);
         }
     }
 }

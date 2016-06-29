@@ -1,37 +1,47 @@
 const GitHub = require('github-api');
+const secret = require('./secret.json');
+
+const gistHash = '5d89d59e4e9355ff5e8316b40dcebf09';
+const gh = new GitHub({
+    token: secret.token
+});
+
+const gist = gh.getGist(gistHash);
 
 function set(user, startDate) {
-	if (user && startDate) {
-		const gh = new GitHub({
-			token: '0d6d08e73ee3c1d58406cb60fed822614d3f898b'
-		});
-		let gist = gh.getGist('3db058b04e2af28d21361fd1fb805dce'); 
-		let data = {
-			"files": {}
-		}
-		data.files[user] = {
-			"content": startDate
-		}
-		gist.read(function(err, result){
-			console.log(result)
-		})
-		gist.update(data)
-		.then(function(httpResponse) {
-			var gistJson = httpResponse.data;
-			console.log(gistJson)
-		});
-	}
+    if (user && startDate && gist) {
+        const data = {
+            files: {}
+        };
+        data.files[user] = {
+            content: startDate
+        };
+        gist.update(data);
+    }
 }
 
-let get =
-	new Promise((resolve, reject) => {
-		const gh = new GitHub({
-			token: '0d6d08e73ee3c1d58406cb60fed822614d3f898b'
-		});
-		const gist = gh.getGist('3db058b04e2af28d21361fd1fb805dce'); 
-		gist.read(function(err, result){
-	        resolve(result);
-	    })
-	});
+function del(user) {
+    if (user && gist) {
+        const data = {
+            files: {}
+        };
+        data.files[user] = null;
+        gist.update(data);
+    }
+}
 
-module.exports = {'get': get, 'set': set};
+const get = new Promise((resolve, reject) => {
+    if (gist) {
+        gist.read((err, result) => {
+            if (err) {
+                reject();
+            } else {
+                resolve(result);
+            }
+        });
+    } else {
+        reject();
+    }
+});
+
+module.exports = {get, set, del};
