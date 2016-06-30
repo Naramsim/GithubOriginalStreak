@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 
 module.exports = {
-    devtool: 'source-map',
     entry: {
         'chrome/src/inject': './src/index.js',
         'firefox/data/inject': './src/index.js'
@@ -21,6 +20,10 @@ module.exports = {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
                 loader: 'babel?presets[]=es2015'
+            },
+            {
+                test: /\.json$/,
+                loader: 'json-loader'
             }
         ]
     },

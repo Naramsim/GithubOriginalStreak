@@ -53,6 +53,7 @@ node_modules
 build
 chrome/src/
 firefox/data
+src/secret.json
 
 # Logs and databases #
 ######################

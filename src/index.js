@@ -41,5 +41,8 @@ function navClickHandler() {
 }
 
 function attachNavClickHandler() {
-    document.querySelector('nav').addEventListener('click', navClickHandler, false);
+    const nav = document.querySelector('nav');
+    if (nav) {
+        nav.addEventListener('click', navClickHandler, false);
+    }
 }
