@@ -65,8 +65,18 @@ function inject() {
     let longestStreakEndingDate = '';
 
     const contributionsCalendar = document.getElementById('contributions-calendar');
-    const currentProfile = document.getElementsByClassName('vcard-username')[0].textContent;
-    const days = Array.from(document.getElementsByClassName('day')).reverse();
+    const vCardSelector = document.getElementsByClassName('vcard-username');
+    const daysSelector = document.getElementsByClassName('day');
+
+    let currentProfile = false;
+    let days = false;
+
+    if (vCardSelector.length > 0) {
+        currentProfile = vCardSelector[0].textContent;
+    }
+    if (daysSelector.length > 0) {
+        days = Array.from(daysSelector).reverse();
+    }
 
     if (contributionsCalendar && currentProfile) {
         parse();
@@ -144,9 +154,9 @@ function inject() {
     }
 
     function build() {
-        const noContributionToday = days[0].attributes['data-count'].value === 0;
+        const noContributionToday = Number(days[0].attributes['data-count'].value) === 0;
         const fullCalendar = nonContributingDays === 0;
-        const fullCalendarApartToday = nonContributingDays === 1 && noContributionToday;
+        const fullCalendarApartToday = (nonContributingDays === 1) && noContributionToday;
 
         // if has submitted a custom start streak date
         // and the calendar is full
@@ -202,7 +212,7 @@ function inject() {
                 currentStreakText = lastContributionText;
             }
 
-            if (currentStreak < 365) {
+            if (longestStreak < 365) {
                 longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate);
             } else {
                 longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate, 'MMM D YYYY');
