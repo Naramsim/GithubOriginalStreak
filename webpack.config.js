@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 
 module.exports = {
-    devtool: 'source-map',
     entry: {
         'chrome/src/inject': './src/index.js',
         'firefox/data/inject': './src/index.js'
