@@ -102,8 +102,8 @@ function inject() {
     function parse() {
         updateContributionsHeading(contributionsCalendar);
 
-        //the line below is for testing
-        //days[23].attributes['data-count'].value = 0
+        // the line below is for testing
+        // days[23].attributes['data-count'].value = 0
 
         // for each day from last day (current day) to first available day
         days.forEach(day => {
@@ -182,10 +182,10 @@ function inject() {
             // if there is a backup
             // and we need to restor it
             if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
-                //set the custom start streak date equal to the backup date
+                // set the custom start streak date equal to the backup date
                 store.set(currentProfile, initialStreakDateGivenByUserBkp);
                 initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
-                //abort this call and start another one
+                // abort this call and start another one
                 build();
                 return false;
             }
@@ -203,10 +203,8 @@ function inject() {
         // thus he ended his streak
         } else if (initialStreakDateGivenByUser) {
             // delete custom start streak date
-            //store.del(currentProfile);
-            store.delAndBackup(currentProfile, initialStreakDateGivenByUserBkp)
-
-            //TODO: permanent delete, when?
+            // store.del(currentProfile);
+            store.delAndBackup(currentProfile, initialStreakDateGivenByUserBkp);
         }
 
         // if has contributed at least one time
