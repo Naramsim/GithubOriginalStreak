@@ -8,7 +8,7 @@
     "prebuild": "npm run test && rimraf chrome/src/ firefox/data/ build",
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "package": " mkdir -p build && cd ./firefox && jpm xpi && mv *.xpi ../build && cd .. && zip -r ./build/chrome.zip ./chrome && cd ./build && cp chrome.zip chrome.nex"
+    "package": " mkdir -p build && cd ./firefox && jpm xpi && mv *.xpi ../build && cd ../chrome && zip -r ../build/chrome.zip ./* && cd ../build && cp chrome.zip chrome.nex"
   },
   "repository": {
     "type": "git",
