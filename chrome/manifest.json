@@ -15,7 +15,9 @@
   "default_locale": "en",
   "offline_enabled": true,
   "permissions": [
-    "*://github.com/*"
+    "*://github.com/*",
+    "*://api.github.com/*",
+    "storage"
   ],
   "content_scripts": [
     {
