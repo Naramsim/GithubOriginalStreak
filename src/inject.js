@@ -53,6 +53,7 @@ function inject() {
 
     let isCurrentStreak = true;
     let initialStreakDateGivenByUser = false;
+    let initialStreakDateGivenByUserBkp = false;
 
     let totalContributionsText = '';
     let longestStreakText = '';
@@ -83,15 +84,13 @@ function inject() {
 
         // if probably has a full calendar
         // retrieve custom start streak date
-        if (nonContributingDays <= 1) {
+        if (nonContributingDays <= 30) {
             // invoke and wait data retrieval
             Promise.all([store.get].map(p => p.catch(err => err)))
                 .then(results => {
                     const profileData = results[0].files[currentProfile];
                     if (profileData) {
-                        initialStreakDateGivenByUser = profileData.content;
-                    } else {
-                        initialStreakDateGivenByUser = false;
+                        [initialStreakDateGivenByUser, initialStreakDateGivenByUserBkp] = profileData.content.split('#');
                     }
                     build();
                 });
@@ -102,6 +101,9 @@ function inject() {
 
     function parse() {
         updateContributionsHeading(contributionsCalendar);
+
+        //the line below is for testing
+        //days[23].attributes['data-count'].value = 0
 
         // for each day from last day (current day) to first available day
         days.forEach(day => {
@@ -157,7 +159,6 @@ function inject() {
         const noContributionToday = Number(days[0].attributes['data-count'].value) === 0;
         const fullCalendar = nonContributingDays === 0;
         const fullCalendarApartToday = (nonContributingDays === 1) && noContributionToday;
-
         // if has submitted a custom start streak date
         // and the calendar is full
         if (initialStreakDateGivenByUser && fullCalendar) {
@@ -178,6 +179,17 @@ function inject() {
         // if the calendar is full
         // of the user hasn'n committed anything today (but the calendar is full)
         if (fullCalendar || fullCalendarApartToday) {
+            // if there is a backup
+            // and we need to restor it
+            if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
+                //set the custom start streak date equal to the backup date
+                store.set(currentProfile, initialStreakDateGivenByUserBkp);
+                initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
+                //abort this call and start another one
+                build();
+                return false;
+            }
+
             // if the user hasn't set a custom start date
             if (!initialStreakDateGivenByUser) {
                 if (currentProfile) {
@@ -191,10 +203,13 @@ function inject() {
         // thus he ended his streak
         } else if (initialStreakDateGivenByUser) {
             // delete custom start streak date
-            store.del(currentProfile);
+            //store.del(currentProfile);
+            store.delAndBackup(currentProfile, initialStreakDateGivenByUserBkp)
+
+            //TODO: permanent delete, when?
         }
 
-        // if has submitted a custom start streak date
+        // if has contributed at least one time
         if (firstContributionDate) {
             // if isCurrentStreak is not false
             // then the getCurrentStreakText w.r.t firstContributionDate
