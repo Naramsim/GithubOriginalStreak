@@ -14,7 +14,7 @@ function set(user, startDate) {
             files: {}
         };
         data.files[user] = {
-            content: startDate
+            content: `${startDate}#${startDate}`
         };
         gist.update(data);
     }
@@ -26,6 +26,18 @@ function del(user) {
             files: {}
         };
         data.files[user] = null;
+        gist.update(data);
+    }
+}
+
+function delAndBackup(user, backup) {
+    if (user && gist && backup) {
+        const data = {
+            files: {}
+        };
+        data.files[user] = {
+            content: `#${backup}`
+        };
         gist.update(data);
     }
 }
@@ -44,4 +56,4 @@ const get = new Promise((resolve, reject) => {
     }
 });
 
-module.exports = {get, set, del};
+module.exports = {get, set, delAndBackup, del};
