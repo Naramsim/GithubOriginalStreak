@@ -88,11 +88,11 @@ function inject() {
             // invoke and wait data retrieval
             Promise.all([store.get].map(p => p.catch(err => err)))
                 .then(results => {
-                    if(results) {
+                    if (results) {
                         const userData = results[0].files[currentProfile];
                         if (userData) {
-                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})(?:#(\d{4}-\d{2}-\d{2}))?$/)
-                            if(match) {
+                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})(?:#(\d{4}-\d{2}-\d{2}))?$/);
+                            if (match) {
                                 initialStreakDateGivenByUser = match[1];
                                 initialStreakDateGivenByUserBkp = match[2];
                             }
