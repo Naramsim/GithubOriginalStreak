@@ -48,7 +48,6 @@ const get = new Promise((resolve, reject) => {
             if (err) {
                 reject();
             } else {
-                console.log(result) 
                 resolve(result);
             }
         });
