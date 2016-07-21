@@ -28,3 +28,8 @@
 .text-muted {
     color: rgb(118, 118, 118);
 }
+.glowing {
+    outline: none;
+    border-color: #c29eed;
+    box-shadow: 0 0 10px #bfbfff;
+}
