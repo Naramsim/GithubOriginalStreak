@@ -32,7 +32,7 @@ function getCurrentStreakText(contributionDate = '', noContributionsToday, forma
 }
 
 function getLastContributionText(contributionDate) {
-    return `Last contributed <time>${moment(contributionDate).add(1, 'days').fromNow(true)} ago</time>`;
+    return `Last contributed <time>${moment(contributionDate).fromNow(true)} ago</time>`;
 }
 
 function getStreakHTML(data) {
@@ -151,9 +151,6 @@ function inject() {
     function parse() {
         updateContributionsHeading(contributionsCalendar);
 
-        // the line below is for testing
-        // days[23].attributes['data-count'].value = 0
-
         // for each day from last day (current day) to first available day
         days.forEach((day, index) => {
             const contributionCount = parseInt(day.attributes['data-count'].value, 10);
@@ -194,7 +191,9 @@ function inject() {
                 // set isCurrentStreak to false
                 // only if we are not processing the very last day
                 if (index !== 0) {
-                    currentStreakText = getCurrentStreakText(firstContributionDate, noContributionToday);
+                    if (firstContributionDate) {
+                        currentStreakText = getCurrentStreakText(firstContributionDate, noContributionToday);
+                    }
                     isCurrentStreak = false;
                 }
             }
@@ -214,9 +213,16 @@ function inject() {
         const fullCalendarApartToday = (nonContributingDays === 1) && noContributionToday;
         // if has submitted a custom start streak date
         // and the calendar is full
-        if (initialStreakDateGivenByUser && fullCalendar) {
-            // update current streak
-            currentStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days');
+        if (initialStreakDateGivenByUser && (fullCalendar || fullCalendarApartToday)) {
+            // if he doesn't contributed today
+            // remove a day from currentStreak
+            if (noContributionToday) {
+                // update current streak
+                currentStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD').add(1, 'days'), 'days');
+            } else {
+                // update current streak
+                currentStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days');
+            }
             firstContributionDate = initialStreakDateGivenByUser;
         }
 
@@ -232,41 +238,7 @@ function inject() {
         // if the calendar is full
         // of the user hasn'n committed anything today (but the calendar is full)
         if (fullCalendar || fullCalendarApartToday) {
-            const customStartStreakDateWasAsked = localStorage.getItem('customStartStreakDateWasAsked');
-
-            // if there is a backup
-            // and we need to restor it
-            if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
-                // set the custom start streak date equal to the backup date
-                store.set(currentProfile, initialStreakDateGivenByUserBkp);
-                initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
-                // abort this call and start another one
-                build();
-                return false;
-            }
-
-            // if the user hasn't a custom start date
-            if (!initialStreakDateGivenByUser) {
-                if (currentProfile) {
-                    // set today as the start streak date
-                    store.set(currentProfile, firstContributionDate);
-                }
-            }
-
-            // if the user is seeing his profile
-            if (currentProfile === loggedProfile) {
-                // if he hasn't answered whether he wants a custom start streak date
-                // ask him if he wants
-                if (!customStartStreakDateWasAsked) {
-                    showCustomStartDateHint();
-                } else if (customStartStreakDateWasAsked === 'later') {
-                    // if he answered 'later'
-                    // randomly re ask
-                    if (Math.floor(Math.random() * 6) === 0) {
-                        showCustomStartDateHint();
-                    }
-                }
-            }
+            buildFullCalendar();
 
         // if user set a custom start streak date
         // but the calendar is no more full
@@ -322,6 +294,44 @@ function inject() {
             const container = document.createElement('div');
             container.innerHTML = getStreakHTML(data);
             contributionsCalendar.appendChild(container);
+        }
+
+        function buildFullCalendar() {
+            const customStartStreakDateWasAsked = localStorage.getItem('customStartStreakDateWasAsked');
+
+            // if there is a backup
+            // and we need to restore it
+            if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
+                // set the custom start streak date equal to the backup date
+                store.set(currentProfile, initialStreakDateGivenByUserBkp);
+                initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
+                // abort this call and start another one
+                build();
+                return false;
+            }
+
+            // if the user hasn't a custom start date
+            if (!initialStreakDateGivenByUser) {
+                if (currentProfile) {
+                    // set today as the start streak date
+                    store.set(currentProfile, firstContributionDate);
+                }
+            }
+
+            // if the user is seeing his profile
+            if (currentProfile === loggedProfile) {
+                // if he hasn't answered whether he wants a custom start streak date
+                // ask him if he wants
+                if (!customStartStreakDateWasAsked) {
+                    showCustomStartDateHint();
+                } else if (customStartStreakDateWasAsked === 'later') {
+                    // if he answered 'later'
+                    // randomly re ask
+                    if (Math.floor(Math.random() * 6) === 0) {
+                        showCustomStartDateHint();
+                    }
+                }
+            }
         }
     }
 
