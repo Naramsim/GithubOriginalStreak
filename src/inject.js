@@ -15,8 +15,14 @@ function updateContributionsHeading(contributionsCalendar) {
     contributionsHeading.textContent = 'Contributions';
 }
 
-function getTotalContributionsText(firstContributionDate, lastContributionDate) {
-    return `${moment(firstContributionDate).format('MMM D YYYY')} - ${moment(lastContributionDate).format('MMM D YYYY')}`;
+function getTotalContributionsText(firstContributionDate, lastContributionDate, moreThan1Year = false) {
+    let contributionText = '';
+    if (moreThan1Year) {
+        contributionText = `${moment(lastContributionDate).subtract(1, 'year').format('MMM D YYYY')} - ${moment(lastContributionDate).format('MMM D YYYY')}`;
+    } else {
+        contributionText = `${moment(firstContributionDate).format('MMM D YYYY')} - ${moment(lastContributionDate).format('MMM D YYYY')}`;
+    }
+    return contributionText;
 }
 function getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate, format = 'MMM D') {
     return `${moment(longestStreakStartingDate).format(format)} - ${moment(longestStreakEndingDate).format(format)}`;
@@ -269,11 +275,11 @@ function inject() {
 
             if (longestStreak < 365) {
                 longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate);
+                totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate);
             } else {
                 longestStreakText = getLongestStreakText(longestStreakStartingDate, longestStreakEndingDate, 'MMM D YYYY');
+                totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate, true);
             }
-
-            totalContributionsText = getTotalContributionsText(firstContributionDate, lastContributionDate);
 
             const data = [
                 [
