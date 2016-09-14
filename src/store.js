@@ -8,13 +8,13 @@ const gh = new GitHub({
 
 const gist = gh.getGist(gistHash);
 
-function set(user, startDate) {
+function set(user, startDate, asked) {
     if (user && startDate && gist) {
         const data = {
             files: {}
         };
         data.files[user] = {
-            content: `${startDate}#${startDate}`
+            content: `${startDate}#${startDate}@${!!asked ? '1' : '0'}`
         };
         gist.update(data);
     }

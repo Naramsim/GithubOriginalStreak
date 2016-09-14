@@ -69,6 +69,7 @@ function inject() {
     let isCurrentStreak = true;
     let initialStreakDateGivenByUser = false;
     let initialStreakDateGivenByUserBkp = false;
+    let customStartStreakDateWasSetByUser = false;
 
     let totalContributionsText = '';
     let longestStreakText = '';
@@ -140,10 +141,11 @@ function inject() {
                     if (results) {
                         const userData = results[0].files[currentProfile];
                         if (userData) {
-                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})(?:#(\d{4}-\d{2}-\d{2}))?$/);
+                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
                             if (match) {
                                 initialStreakDateGivenByUser = match[1];
                                 initialStreakDateGivenByUserBkp = match[2];
+                                customStartStreakDateWasSetByUser = match[3] === '1';
                             }
                         }
                         build();
@@ -156,6 +158,9 @@ function inject() {
 
     function parse() {
         updateContributionsHeading(contributionsCalendar);
+
+        // the line below is for testing
+        // days[23].attributes['data-count'].value = 0
 
         // for each day from last day (current day) to first available day
         days.forEach((day, index) => {
@@ -309,7 +314,7 @@ function inject() {
             // and we need to restore it
             if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
                 // set the custom start streak date equal to the backup date
-                store.set(currentProfile, initialStreakDateGivenByUserBkp);
+                store.set(currentProfile, initialStreakDateGivenByUserBkp, !!customStartStreakDateWasSetByUser);
                 initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
                 // abort this call and start another one
                 build();
@@ -320,7 +325,7 @@ function inject() {
             if (!initialStreakDateGivenByUser) {
                 if (currentProfile) {
                     // set today as the start streak date
-                    store.set(currentProfile, firstContributionDate);
+                    store.set(currentProfile, firstContributionDate, false);
                 }
             }
 
@@ -328,12 +333,12 @@ function inject() {
             if (currentProfile === loggedProfile) {
                 // if he hasn't answered whether he wants a custom start streak date
                 // ask him if he wants
-                if (!customStartStreakDateWasAsked) {
+                if (!customStartStreakDateWasAsked && !customStartStreakDateWasSetByUser) {
                     showCustomStartDateHint();
                 } else if (customStartStreakDateWasAsked === 'later') {
                     // if he answered 'later'
-                    // randomly re ask
-                    if (Math.floor(Math.random() * 6) === 0) {
+                    // randomly re-ask
+                    if (Math.floor(Math.random() * 8) === 0) {
                         showCustomStartDateHint();
                     }
                 }
@@ -351,7 +356,7 @@ function inject() {
                 const customDate = customDateInput.value;
                 if (customDate && customDateRe.test(customDate)) {
                     closeCustomDateModal('yes');
-                    store.set(currentProfile, customDate);
+                    store.set(currentProfile, customDate, true);
                 } else {
                     customDateInput.classList.add('glowing');
                 }
