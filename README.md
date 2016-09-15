@@ -11,6 +11,7 @@ Revert GitHub contributions and streak. A browser extension.
 - [x] Longest Streak
 - [x] Current Streak
 - [x] Streaks no more limited to one year
+- [x] New Github Design compatible
 
 ## Browser support
 [![chrome](https://img.shields.io/badge/chrome-v1.11-brightgreen.svg)](https://chrome.google.com/webstore/detail/github-original-streak/jgfeifpakohnblfnjdpigclinhbkocja)
@@ -19,7 +20,7 @@ Revert GitHub contributions and streak. A browser extension.
 
 For downloading the extensions just click on the badges above, they will bring you to the appropriate store.
 
-![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/streak.jpg)
+![streak](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/media/Screen.png)
 
 ## Contributing
 

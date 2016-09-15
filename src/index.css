@@ -2,8 +2,6 @@
     text-align: center;
     font-size: 11px;
     padding: 15px 0px;
-    border-left: 1px solid rgb(221, 221, 221);
-    border-top: 1px solid rgb(221, 221, 221); 
 }
 .contrib-column-first {
     border-left: 0px;
@@ -32,4 +30,7 @@
     outline: none;
     border-color: #c29eed;
     box-shadow: 0 0 10px #bfbfff;
+}
+.mb-5.border.border-gray-dark.rounded-1.py-3 {
+    padding-bottom: 0px !important;
 }

@@ -14,7 +14,7 @@ function set(user, startDate, asked) {
             files: {}
         };
         data.files[user] = {
-            content: `${startDate}#${startDate}@${!!asked ? '1' : '0'}`
+            content: `${startDate}#${startDate}@${asked ? '1' : '0'}`
         };
         gist.update(data);
     }
