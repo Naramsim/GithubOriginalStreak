@@ -20,12 +20,14 @@ function navClickHandler() {
             if (mutation.oldValue && mutation.oldValue.indexOf('is-loading') > -1) {
                 // stop observing
                 observer.disconnect();
-                // invoke inject function
-                inject();
-                // invoke changeColor function
-                changeContributionsColor();
-                // attach clickHandler to nav as it has been detached
-                attachNavClickHandler();
+                setTimeout(() => {
+                    // invoke inject function
+                    inject();
+                    // invoke changeColor function
+                    changeContributionsColor();
+                    // attach clickHandler to nav as it has been detached
+                    attachNavClickHandler();
+                },300)
             }
         });
     });
@@ -41,8 +43,13 @@ function navClickHandler() {
 }
 
 function attachNavClickHandler() {
-    const nav = document.querySelector('nav');
-    if (nav) {
-        nav.addEventListener('click', navClickHandler, false);
+    const navs = document.querySelectorAll('nav, .profile-timeline-year-list.js-sticky');
+    if (navs.length > 0) {
+        navs.forEach((nav) => {
+            // resets and adds a click handler
+            // since the page is rewritten
+            nav.removeEventListener('click', navClickHandler, false);
+            nav.addEventListener('click', navClickHandler, false);
+        })
     }
 }

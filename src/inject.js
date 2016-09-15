@@ -81,8 +81,9 @@ function inject() {
     let longestStreakStartingDate = '';
     let longestStreakEndingDate = '';
 
+    let contributionsCalendar = document.querySelectorAll('.mb-5.border.border-gray-dark.rounded-1.py-3')[0];
+
     const body = document.body;
-    const contributionsCalendar = document.getElementById('contributions-calendar');
     const vCardSelector = document.getElementsByClassName('vcard-username');
     const loginSelector = document.querySelectorAll('.dropdown-header strong.css-truncate-target');
     const daysSelector = document.getElementsByClassName('day');
@@ -111,13 +112,10 @@ function inject() {
         </div>
     </div>`;
 
-    // insert modal for asking custom start streak date (not visible)
-    contributionsCalendar.insertAdjacentHTML('afterbegin', customStartStreakHintText);
-
-    const submitCustomDate = document.getElementById('submitCustomStartStreakDate');
-    const laterCustomDate = document.getElementById('sumbitLaterCustomStartStreakDate');
-    const customDateInput = document.getElementById('customDateInput');
-    const customDateRe = /\d{4}-\d{1,2}-\d{1,2}/;
+    // if the user has the old versions
+    if (!contributionsCalendar) {
+        contributionsCalendar = document.getElementById('contributions-calendar');
+    }
 
     if (vCardSelector.length > 0) {
         currentProfile = vCardSelector[0].textContent;
@@ -130,6 +128,8 @@ function inject() {
     }
 
     if (contributionsCalendar && currentProfile) {
+        // insert modal for asking custom start streak date (not visible)
+        contributionsCalendar.insertAdjacentHTML('afterbegin', customStartStreakHintText);
         parse();
 
         // if probably has a full calendar
@@ -239,7 +239,7 @@ function inject() {
 
         // if has submitted a custom start streak date
         // and  the calendar is full
-        //      or the user hasn'n committed anything today (but the calendar is full)
+        // or the user hasn'n committed anything today (but the calendar is full)
         if (initialStreakDateGivenByUser && (fullCalendar || fullCalendarApartToday)) {
             // update longest streak
             longestStreak = now.diff(moment(initialStreakDateGivenByUser, 'YYYY-MM-DD'), 'days') - nonContributingDays;
@@ -314,7 +314,7 @@ function inject() {
             // and we need to restore it
             if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
                 // set the custom start streak date equal to the backup date
-                store.set(currentProfile, initialStreakDateGivenByUserBkp, !!customStartStreakDateWasSetByUser);
+                store.set(currentProfile, initialStreakDateGivenByUserBkp, Boolean(customStartStreakDateWasSetByUser));
                 initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
                 // abort this call and start another one
                 build();
@@ -347,6 +347,10 @@ function inject() {
     }
 
     function showCustomStartDateHint() {
+        const submitCustomDate = document.getElementById('submitCustomStartStreakDate');
+        const laterCustomDate = document.getElementById('sumbitLaterCustomStartStreakDate');
+        const customDateInput = document.getElementById('customDateInput');
+        const customDateRe = /\d{4}-\d{1,2}-\d{1,2}/;
         if (modalOverlay.length > 0) {
             body.classList.add('menu-active');
             modalOverlay[0].addEventListener('click', () => {
