@@ -27,7 +27,7 @@ function navClickHandler() {
                     changeContributionsColor();
                     // attach clickHandler to nav as it has been detached
                     attachNavClickHandler();
-                },300)
+                }, 300);
             }
         });
     });
@@ -45,11 +45,11 @@ function navClickHandler() {
 function attachNavClickHandler() {
     const navs = document.querySelectorAll('nav, .profile-timeline-year-list.js-sticky');
     if (navs.length > 0) {
-        navs.forEach((nav) => {
+        navs.forEach(nav => {
             // resets and adds a click handler
             // since the page is rewritten
             nav.removeEventListener('click', navClickHandler, false);
             nav.addEventListener('click', navClickHandler, false);
-        })
+        });
     }
 }
