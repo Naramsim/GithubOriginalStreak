@@ -141,7 +141,7 @@ function inject() {
                     if (results) {
                         const userData = results[0].files[currentProfile];
                         if (userData) {
-                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
+                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})?(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
                             if (match) {
                                 initialStreakDateGivenByUser = match[1];
                                 initialStreakDateGivenByUserBkp = match[2];
