@@ -62,6 +62,6 @@
   },
   "dependencies": {
     "moment": "^2.14.1",
-    "github-api": "^2.3.0"
+    "github-api": "^3.0.0"
   }
 }
