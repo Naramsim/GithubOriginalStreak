@@ -12,6 +12,9 @@
     "48": "icons/g48.png",
     "128": "icons/g128.png"
   },
+  "browser_action": {
+    "default_icon": "icons/g128.png"
+  },
   "default_locale": "en",
   "offline_enabled": true,
   "permissions": [
