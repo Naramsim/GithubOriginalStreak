@@ -46,7 +46,7 @@ function getStreakHTML(data) {
         return `
         <div class="contrib-column table-column ${index === 0 ? 'contrib-column-first' : ''}">
             <span class="text-muted">${item[0]}</span>
-            <span class="contrib-number">${item[1]}</span>
+            <span class="contrib-number">${item[1].toLocaleString()}</span>
             <span class="text-muted">${item[2]}</span>
         </div>
         `;
