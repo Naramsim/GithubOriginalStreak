@@ -289,15 +289,15 @@ function inject() {
             const data = [
                 [
                     'Contributions in the last year',
-                    `${totalContributions} total`,
+                    `${totalContributions.toLocaleString()} total`,
                     totalContributionsText
                 ], [
                     'Longest streak',
-                    `${longestStreak} days`,
+                    `${longestStreak.toLocaleString()} days`,
                     longestStreakText
                 ], [
                     'Current streak',
-                    `${currentStreak} days`,
+                    `${currentStreak.toLocaleString()} days`,
                     currentStreakText
                 ]
             ];
