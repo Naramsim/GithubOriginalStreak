@@ -2,7 +2,6 @@
 ---
 
 [![Join the chat at https://gitter.im/Naramsim/GithubOriginalStreak](https://badges.gitter.im/Naramsim/GithubOriginalStreak.svg)](https://gitter.im/Naramsim/GithubOriginalStreak?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) 
-[![bitHound Overall Score](https://www.bithound.io/github/Naramsim/GithubOriginalStreak/badges/score.svg)](https://www.bithound.io/github/Naramsim/GithubOriginalStreak)
 [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![Build Status](https://travis-ci.org/Naramsim/GithubOriginalStreak.svg?branch=master)](https://travis-ci.org/Naramsim/GithubOriginalStreak)
 
