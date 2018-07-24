@@ -81,7 +81,7 @@ function inject() {
     let longestStreakStartingDate = '';
     let longestStreakEndingDate = '';
 
-    let contributionsCalendar = document.querySelectorAll('.mb-5.border.border-gray-dark.rounded-1.py-2')[0];
+    let contributionsCalendar = document.querySelectorAll('.graph-before-highlights')[0];
 
     const body = document.body;
     const vCardSelector = document.getElementsByClassName('vcard-username');
