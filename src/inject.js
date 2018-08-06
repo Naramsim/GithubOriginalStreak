@@ -81,7 +81,7 @@ function inject() {
     let longestStreakStartingDate = '';
     let longestStreakEndingDate = '';
 
-    let contributionsCalendar = document.querySelectorAll('.graph-before-highlights')[0];
+    let contributionsCalendar = document.querySelectorAll('.graph-before-activity-overview')[0];
 
     const body = document.body;
     const vCardSelector = document.getElementsByClassName('vcard-username');
@@ -114,7 +114,7 @@ function inject() {
 
     // if the user has the old versions
     if (!contributionsCalendar) {
-        contributionsCalendar = document.getElementById('contributions-calendar');
+        contributionsCalendar = document.getElementById('.js-contribution-graph > div.border');
     }
 
     if (vCardSelector.length > 0) {
