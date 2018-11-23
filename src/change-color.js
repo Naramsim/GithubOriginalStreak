@@ -9,18 +9,18 @@ function changeContributionsColor() {
     const color = localStorage.getItem('colorScheme');
     const colorSchemes = {
         'blue-sky': {
-            'eeeeee': 'eeeeee',
-            'd6e685': '9DC1F6',
-            '8cc665': '629DF3',
-            '44a340': '2B7BF2',
-            '1e6823': '0363F0'
+            'ebedf0': 'ebedf0',
+            'c6e48b': '9DC1F6',
+            '7bc96f': '629DF3',
+            '239a3b': '2B7BF2',
+            '196127': '0363F0'
         },
         'halloween': {
-            'eeeeee': 'eeeeee',
-            'd6e685': 'FFEE58',
-            '8cc665': 'FFCA28',
-            '44a340': 'EF6C00',
-            '1e6823': '000000'
+            'ebedf0': 'ebedf0',
+            'c6e48b': 'FFEE58',
+            '7bc96f': 'FFCA28',
+            '239a3b': 'EF6C00',
+            '196127': '000000'
         }
     };
 
