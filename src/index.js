@@ -17,17 +17,19 @@ function navClickHandler() {
      */
     const observer = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
-            if (mutation.oldValue && mutation.oldValue.indexOf('is-loading') > -1) {
-                // stop observing
-                observer.disconnect();
-                setTimeout(() => {
-                    // invoke inject function
-                    inject();
-                    // invoke changeColor function
-                    changeContributionsColor();
-                    // attach clickHandler to nav as it has been detached
-                    attachNavClickHandler();
-                }, 300);
+            if (mutation.oldValue) {
+                if (mutation.oldValue.indexOf('is-loading') > -1 || mutation.target.classList.contains('selected')) {
+                    // stop observing
+                    observer.disconnect();
+                    setTimeout(() => {
+                        // invoke inject function
+                        inject();
+                        // invoke changeColor function
+                        changeContributionsColor();
+                        // attach clickHandler to nav as it has been detached
+                        attachNavClickHandler();
+                    }, 1600);
+                }
             }
         });
     });
@@ -35,11 +37,14 @@ function navClickHandler() {
      * observe pjaxLoaderBar for changes in attributes
      */
     const pjaxLoaderBar = document.getElementById('js-pjax-loader-bar');
+    const yearsList = document.querySelector('.filter-list.small');
     const config = {
         attributes: true,
-        attributeOldValue: true
+        attributeOldValue: true,
+        subtree: true
     };
     observer.observe(pjaxLoaderBar, config);
+    observer.observe(yearsList, config);
 }
 
 function attachNavClickHandler() {
