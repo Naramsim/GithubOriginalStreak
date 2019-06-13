@@ -38,6 +38,7 @@ function navClickHandler() {
      */
     const pjaxLoaderBar = document.getElementById('js-pjax-loader-bar');
     const yearsList = document.querySelector('.filter-list.small');
+    const orgsNav = document.querySelector('.js-org-filter-links-container > nav');
     const config = {
         attributes: true,
         attributeOldValue: true,
@@ -45,6 +46,7 @@ function navClickHandler() {
     };
     observer.observe(pjaxLoaderBar, config);
     observer.observe(yearsList, config);
+    observer.observe(orgsNav, config);
 }
 
 function attachNavClickHandler() {
