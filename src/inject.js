@@ -304,7 +304,10 @@ function inject() {
 
             const container = document.createElement('div');
             container.innerHTML = getStreakHTML(data);
-            contributionsCalendar.appendChild(container);
+            container.classList.add('original-streak')
+            if (!document.querySelector('.original-streak')) {
+                contributionsCalendar.appendChild(container);
+            }
         }
 
         function buildFullCalendar() {
