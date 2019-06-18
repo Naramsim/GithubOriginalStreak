@@ -28,7 +28,7 @@ function navClickHandler() {
                         changeContributionsColor();
                         // attach clickHandler to nav as it has been detached
                         attachNavClickHandler();
-                    }, 1600);
+                    }, 2000);
                 }
             }
         });
@@ -44,9 +44,15 @@ function navClickHandler() {
         attributeOldValue: true,
         subtree: true
     };
-    observer.observe(pjaxLoaderBar, config);
-    observer.observe(yearsList, config);
-    observer.observe(orgsNav, config);
+    if (pjaxLoaderBar) {
+        observer.observe(pjaxLoaderBar, config);
+    }
+    if (yearsList) {
+        observer.observe(yearsList, config);
+    }
+    if (orgsNav) {
+        observer.observe(orgsNav, config);
+    }
 }
 
 function attachNavClickHandler() {
