@@ -89,7 +89,7 @@ function inject() {
     const daysSelector = document.getElementsByClassName('day');
     const modalOverlay = document.getElementsByClassName('modal-backdrop');
 
-    const customStartStreakHintText = `<div class="anim-scale-in js-menu-content dropdown-menu-content">
+    const customStartStreakHintText = `<div style="display: none" class="anim-scale-in js-menu-content dropdown-menu-content">
     <div class="dropdown-menu dropdown-menu-w" style="width:300px;padding-top:1px;">
         <div class="signed-commit-header flex-table px-3">
             <div class="flex-table-item">
