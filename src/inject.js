@@ -293,11 +293,11 @@ function inject() {
                     totalContributionsText
                 ], [
                     'Longest streak',
-                    `${longestStreak.toLocaleString()} days`,
+                    `${longestStreak.toLocaleString()} ${longestStreak == 1 ? 'day' : 'days'}`,
                     longestStreakText
                 ], [
                     'Current streak',
-                    `${currentStreak.toLocaleString()} days`,
+                    `${currentStreak.toLocaleString()} ${currentStreak == 1 ? 'day' : 'days'}`,
                     currentStreakText
                 ]
             ];
