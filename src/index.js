@@ -28,7 +28,7 @@ function navClickHandler() {
                         changeContributionsColor();
                         // attach clickHandler to nav as it has been detached
                         attachNavClickHandler();
-                    }, 2000);
+                    }, 3000);
                 }
             }
         });
@@ -36,7 +36,7 @@ function navClickHandler() {
     /**
      * observe pjaxLoaderBar for changes in attributes
      */
-    const pjaxLoaderBar = document.getElementById('js-pjax-loader-bar');
+    const pjaxLoaderBar = document.getElementsByClassName('js-pjax-loader-bar')[0];
     const yearsList = document.querySelector('.filter-list.small');
     const orgsNav = document.querySelector('.js-org-filter-links-container > nav');
     const config = {
