@@ -14,17 +14,17 @@
     vertical-align: top;
 }
 .text-muted {
-    color: rgb(118, 118, 118);
+    color: var(--color-text-secondary);
 }
 .contrib-number {
     font-weight: 300;
     line-height: 1.3em;
     font-size: 24px;
     display: block;
-    color: rgb(51, 51, 51);
+    color: var(--color-text-primary);
 }
 .text-muted {
-    color: rgb(118, 118, 118);
+    color: var(--color-text-secondary);
 }
 .glowing {
     outline: none;
