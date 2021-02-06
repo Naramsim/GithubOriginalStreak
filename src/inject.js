@@ -86,7 +86,7 @@ function inject() {
     const body = document.body;
     const vCardSelector = document.getElementsByClassName('vcard-username');
     const loginSelector = document.querySelectorAll('.dropdown-header strong.css-truncate-target');
-    const daysSelector = document.getElementsByClassName('day');
+    const daysSelector = document.querySelectorAll('.ContributionCalendar-day[data-count]');
     const modalOverlay = document.getElementsByClassName('modal-backdrop');
 
     const customStartStreakHintText = `<div style="display: none" class="anim-scale-in js-menu-content dropdown-menu-content">
@@ -163,7 +163,9 @@ function inject() {
         // days[23].attributes['data-count'].value = 0
 
         // for each day from last day (current day) to first available day
+
         days.forEach((day, index) => {
+            console.log(day)
             const contributionCount = parseInt(day.attributes['data-count'].value, 10);
             const contributionDate = day.attributes['data-date'].value;
             const noContributionToday = Number(days[0].attributes['data-count'].value) === 0;
