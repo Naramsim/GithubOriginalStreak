@@ -1,5 +1,6 @@
 require('./index.css');
 const inject = require('./inject');
+const {qs, qsa} = require('./node');
 const changeContributionsColor = require('./change-color');
 
 // invoke inject function
@@ -36,9 +37,9 @@ function navClickHandler() {
     /**
      * observe pjaxLoaderBar for changes in attributes
      */
-    const pjaxLoaderBar = document.getElementsByClassName('js-pjax-loader-bar')[0];
-    const yearsList = document.querySelector('.filter-list.small');
-    const orgsNav = document.querySelector('.js-org-filter-links-container > nav');
+    const pjaxLoaderBar = qsa('.js-pjax-loader-bar')[0];
+    const yearsList = qs('.filter-list.small', false);
+    const orgsNav = qs('.js-org-filter-links-container > nav', false);
     const config = {
         attributes: true,
         attributeOldValue: true,
@@ -56,7 +57,7 @@ function navClickHandler() {
 }
 
 function attachNavClickHandler() {
-    const navs = document.querySelectorAll('nav, .profile-timeline-year-list.js-sticky');
+    const navs = qsa('nav, .profile-timeline-year-list.js-sticky');
     if (navs.length > 0) {
         navs.forEach(nav => {
             // resets and adds a click handler

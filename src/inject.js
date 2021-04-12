@@ -1,5 +1,6 @@
 const moment = require('moment');
 const store = require('./store');
+const {qs, qsa} = require('./node');
 
 const now = moment();
 
@@ -81,13 +82,13 @@ function inject() {
     let longestStreakStartingDate = '';
     let longestStreakEndingDate = '';
 
-    let contributionsCalendar = document.querySelectorAll('.graph-before-activity-overview')[0];
+    let contributionsCalendar = qsa('.graph-before-activity-overview')[0];
 
     const body = document.body;
-    const vCardSelector = document.getElementsByClassName('vcard-username');
-    const loginSelector = document.querySelectorAll('.dropdown-header strong.css-truncate-target');
-    const daysSelector = document.querySelectorAll('.ContributionCalendar-day[data-count]');
-    const modalOverlay = document.getElementsByClassName('modal-backdrop');
+    const vCardSelector = qsa('.vcard-username');
+    const loginSelector = qsa('.dropdown-header strong.css-truncate-target');
+    const daysSelector = qsa('.ContributionCalendar-day[data-count]');
+    const modalOverlay = qsa('.modal-backdrop');
 
     const customStartStreakHintText = `<div style="display: none" class="anim-scale-in js-menu-content dropdown-menu-content">
     <div class="dropdown-menu dropdown-menu-w" style="width:300px;padding-top:1px;">
@@ -311,22 +312,22 @@ function inject() {
             // if there is a backup
             // and we need to restore it
             if (!customStartStreakDateWasSetByUser) {
-            if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
-                // set the custom start streak date equal to the backup date
-                store.set(currentProfile, initialStreakDateGivenByUserBkp, Boolean(customStartStreakDateWasSetByUser));
-                initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
-                // abort this call and start another one
-                build();
-                return false;
-            }
-
-            // if the user hasn't a custom start date
-            if (!initialStreakDateGivenByUser) {
-                if (currentProfile) {
-                    // set today as the start streak date
-                    store.set(currentProfile, firstContributionDate, false);
+                if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
+                    // set the custom start streak date equal to the backup date
+                    store.set(currentProfile, initialStreakDateGivenByUserBkp, Boolean(customStartStreakDateWasSetByUser));
+                    initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
+                    // abort this call and start another one
+                    build();
+                    return false;
                 }
-            }
+
+                // if the user hasn't a custom start date
+                if (!initialStreakDateGivenByUser) {
+                    if (currentProfile) {
+                        // set today as the start streak date
+                        store.set(currentProfile, firstContributionDate, false);
+                    }
+                }
             }
 
             // if the user is seeing his profile
@@ -347,9 +348,9 @@ function inject() {
     }
 
     function showCustomStartDateHint() {
-        const submitCustomDate = document.getElementById('submitCustomStartStreakDate');
-        const laterCustomDate = document.getElementById('sumbitLaterCustomStartStreakDate');
-        const customDateInput = document.getElementById('customDateInput');
+        const submitCustomDate = qs('#submitCustomStartStreakDate');
+        const laterCustomDate = qs('#sumbitLaterCustomStartStreakDate');
+        const customDateInput = qs('#customDateInput');
         const customDateRe = /\d{4}-\d{1,2}-\d{1,2}/;
         if (modalOverlay.length > 0) {
             body.classList.add('menu-active');
