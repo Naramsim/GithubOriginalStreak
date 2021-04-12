@@ -6,9 +6,10 @@
     "commit": "git-cz",
     "test": "xo",
     "prebuild": "rimraf chrome/src/ firefox/data/ build",
+    "prepackage": "rimraf build",
     "build": "webpack",
     "build:watch": "webpack --watch",
-    "package": "mkdir -p build && cd ./chrome && zip -r ../build/chrome.zip ./* && cd ../build && cp chrome.zip chrome.nex"
+    "package": "mkdirp build && cd ./chrome && zip -r ../build/chrome.zip ./* && cd ../build && cp chrome.zip chrome.nex"
   },
   "repository": {
     "type": "git",
