@@ -4,7 +4,7 @@ function printMissingNode(selector) {
 
 function qs(selector, mandatory=true) {
     const node = document.querySelector(selector)
-    if (node === null && mandatory) {
+    if ((node === null) && mandatory) {
         printMissingNode(selector)
     }
     return node
