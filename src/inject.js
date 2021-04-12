@@ -112,21 +112,15 @@ function inject() {
         </div>
     </div>`;
 
-    // if the user has the old versions
-    if (!contributionsCalendar) {
-        contributionsCalendar = document.getElementById('.js-contribution-graph > div.border');
-    }
-
     if (vCardSelector.length > 0) {
-        currentProfile = vCardSelector[0].textContent;
+        currentProfile = vCardSelector[0].textContent.trim();
     }
     if (loginSelector.length > 0) {
-        loggedProfile = loginSelector[0].textContent;
+        loggedProfile = loginSelector[0].textContent.trim();
     }
     if (daysSelector.length > 0) {
         days = Array.from(daysSelector).reverse();
     }
-
     if (contributionsCalendar && currentProfile) {
         // insert modal for asking custom start streak date (not visible)
         contributionsCalendar.insertAdjacentHTML('afterbegin', customStartStreakHintText);
@@ -316,6 +310,7 @@ function inject() {
 
             // if there is a backup
             // and we need to restore it
+            if (!customStartStreakDateWasSetByUser) {
             if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
                 // set the custom start streak date equal to the backup date
                 store.set(currentProfile, initialStreakDateGivenByUserBkp, Boolean(customStartStreakDateWasSetByUser));
@@ -331,6 +326,7 @@ function inject() {
                     // set today as the start streak date
                     store.set(currentProfile, firstContributionDate, false);
                 }
+            }
             }
 
             // if the user is seeing his profile
