@@ -8,8 +8,12 @@ const gh = new GitHub({
 
 const gist = gh.getGist(gistHash);
 
+function isdefaultView() {
+    return window.location.search === ""
+}
+
 function set(user, startDate, asked) {
-    if (user && startDate && gist) {
+    if (user && startDate && gist && isdefaultView) {
         const data = {
             files: {}
         };
@@ -20,6 +24,7 @@ function set(user, startDate, asked) {
     }
 }
 
+// Deprecated
 function del(user) {
     if (user && gist) {
         const data = {
