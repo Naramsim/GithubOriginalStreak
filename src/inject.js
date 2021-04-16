@@ -250,7 +250,7 @@ function inject() {
         // if user set a custom start streak date
         // but the calendar is no more full
         // thus he ended his streak
-        } else if (initialStreakDateGivenByUser) {
+        } else if (initialStreakDateGivenByUser && !customStartStreakDateWasSetByUser) {
             // delete custom start streak date
             // store.del(currentProfile);
             store.delAndBackup(currentProfile, initialStreakDateGivenByUserBkp);
