@@ -29,6 +29,3 @@ Please refer [Contributing guidelines](contributing.md) to enhance your contribu
 ## Contributors
 [Naramsim](https://github.com/Naramsim) and [sarbbottam](https://github.com/sarbbottam)
 
-## Do you want a fancy?
-
-`localStorage.setItem('colorScheme', 'blue-sky')` then reload
