@@ -56,7 +56,6 @@ function getStreakHTML(data) {
 
 function inject() {
     let currentProfile = false;
-    let loggedProfile = false;
     let days = false;
 
     let totalContributions = 0;
@@ -69,8 +68,6 @@ function inject() {
 
     let isCurrentStreak = true;
     let initialStreakDateGivenByUser = false;
-    let initialStreakDateGivenByUserBkp = false;
-    let customStartStreakDateWasSetByUser = false;
 
     let totalContributionsText = '';
     let longestStreakText = '';
@@ -84,68 +81,33 @@ function inject() {
 
     let contributionsCalendar = qsa('.graph-before-activity-overview')[0];
 
-    const body = document.body;
     const vCardSelector = qsa('.vcard-username');
-    const loginSelector = qsa('.dropdown-header strong.css-truncate-target');
     const daysSelector = qsa('.ContributionCalendar-day[data-count]');
-    const modalOverlay = qsa('.modal-backdrop');
-
-    const customStartStreakHintText = `<div style="display: none" class="anim-scale-in js-menu-content dropdown-menu-content">
-    <div class="dropdown-menu dropdown-menu-w" style="width:300px;padding-top:1px;">
-        <div class="signed-commit-header flex-table px-3">
-            <div class="flex-table-item">
-                <svg aria-hidden="true" class="octicon octicon-versions mr-3" height="32" version="1.1" viewBox="0 0 14 16" width="28"><<path d="M13 3H7c-.55 0-1 .45-1 1v8c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V4c0-.55-.45-1-1-1zm-1 8H8V5h4v6zM4 4h1v1H4v6h1v1H4c-.55 0-1-.45-1-1V5c0-.55.45-1 1-1zM1 5h1v1H1v4h1v1H1c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1z"></path></svg>
-            </div>
-            <div class="flex-table-item-primary">
-            Whoa! This calendar looks pretty good. By the way thanks for using GithubOriginalStreak.
-            </div>
-        </div>
-        <div class="signed-commit-footer">
-            <span class="d-block">If your initial start streak date is incorrect you can set here a new one.</span>
-            <span class="d-block text-muted">So current and longest streaks will show as they were: more than one year!</span>
-            <span class="d-block text-muted">Click anywhere else to dismiss this dialog permanently</span>
-        </div>
-        <form style="margin-left: 9px;margin-bottom: 4px;" onsubmit="return false;">
-            <input type="date" id="customDateInput" class="form-control filename js-gist-filename js-blob-filename" aria-label="YYYY-MM-DD" value="" placeholder="YYYY-MM-DD"  autofocus="">
-            <button type="button" id="submitCustomStartStreakDate" class="btn btn-primary js-add-gist-file">Set</button>
-            <button type="button" id="sumbitLaterCustomStartStreakDate" class="btn js-add-gist-file">Later</button>
-        </form>
-        </div>
-    </div>`;
 
     if (vCardSelector.length > 0) {
         currentProfile = vCardSelector[0].textContent.trim();
-    }
-    if (loginSelector.length > 0) {
-        loggedProfile = loginSelector[0].textContent.trim();
     }
     if (daysSelector.length > 0) {
         days = Array.from(daysSelector).reverse();
     }
     if (contributionsCalendar && currentProfile) {
-        // insert modal for asking custom start streak date (not visible)
-        contributionsCalendar.insertAdjacentHTML('afterbegin', customStartStreakHintText);
         parse();
 
         // if probably has a full calendar
         // retrieve custom start streak date
         if (nonContributingDays <= 30) {
             // invoke and wait data retrieval
-            Promise.all([store.get].map(p => p.catch(err => err)))
-                .then(results => {
-                    if (results) {
-                        const userData = results[0].files[currentProfile];
-                        if (userData) {
-                            const match = userData.content.match(/^(\d{4}-\d{2}-\d{2})?(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
-                            if (match) {
-                                initialStreakDateGivenByUser = match[1];
-                                initialStreakDateGivenByUserBkp = match[2];
-                                customStartStreakDateWasSetByUser = match[3] === '1';
-                            }
-                        }
-                        build();
+            store.get(currentProfile).then(userData => {
+                if (userData) {
+                    const match = userData.data.match(/^(\d{4}-\d{2}-\d{2})?(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
+                    if (match) {
+                        initialStreakDateGivenByUser = match[1];
+                        // initialStreakDateGivenByUserBkp = match[2]; // Deprecated
+                        // customStartStreakDateWasSetByUser = (match[3] === '1'); // Deprecated
                     }
-                });
+                }
+                build();
+            });
         } else {
             build();
         }
@@ -242,20 +204,6 @@ function inject() {
             longestStreakStartingDate = initialStreakDateGivenByUser;
         }
 
-        // if the calendar is full
-        // of the user hasn'n committed anything today (but the calendar is full)
-        if (fullCalendar || fullCalendarApartToday) {
-            buildFullCalendar();
-
-        // if user set a custom start streak date
-        // but the calendar is no more full
-        // thus he ended his streak
-        } else if (initialStreakDateGivenByUser && !customStartStreakDateWasSetByUser) {
-            // delete custom start streak date
-            // store.del(currentProfile);
-            store.delAndBackup(currentProfile, initialStreakDateGivenByUserBkp);
-        }
-
         // if has contributed at least one time
         if (firstContributionDate) {
             // if isCurrentStreak is not false
@@ -305,79 +253,6 @@ function inject() {
                 contributionsCalendar.appendChild(container);
             }
         }
-
-        function buildFullCalendar() {
-            const customStartStreakDateWasAsked = localStorage.getItem('customStartStreakDateWasAsked');
-
-            // if there is a backup
-            // and we need to restore it
-            if (!customStartStreakDateWasSetByUser) {
-                if (initialStreakDateGivenByUserBkp && (initialStreakDateGivenByUserBkp !== initialStreakDateGivenByUser)) {
-                    // set the custom start streak date equal to the backup date
-                    store.set(currentProfile, initialStreakDateGivenByUserBkp, Boolean(customStartStreakDateWasSetByUser));
-                    initialStreakDateGivenByUser = initialStreakDateGivenByUserBkp;
-                    // abort this call and start another one
-                    build();
-                    return false;
-                }
-
-                // if the user hasn't a custom start date
-                if (!initialStreakDateGivenByUser) {
-                    if (currentProfile) {
-                        // set today as the start streak date
-                        store.set(currentProfile, firstContributionDate, false);
-                    }
-                }
-            }
-
-            // if the user is seeing his profile
-            if (currentProfile === loggedProfile) {
-                // if he hasn't answered whether he wants a custom start streak date
-                // ask him if he wants
-                if (!customStartStreakDateWasAsked && !customStartStreakDateWasSetByUser) {
-                    showCustomStartDateHint();
-                } else if (customStartStreakDateWasAsked === 'later') {
-                    // if he answered 'later'
-                    // randomly re-ask
-                    if (Math.floor(Math.random() * 8) === 0) {
-                        showCustomStartDateHint();
-                    }
-                }
-            }
-        }
-    }
-
-    function showCustomStartDateHint() {
-        const submitCustomDate = qs('#submitCustomStartStreakDate');
-        const laterCustomDate = qs('#sumbitLaterCustomStartStreakDate');
-        const customDateInput = qs('#customDateInput');
-        const customDateRe = /\d{4}-\d{1,2}-\d{1,2}/;
-        if (modalOverlay.length > 0) {
-            body.classList.add('menu-active');
-            modalOverlay[0].addEventListener('click', () => {
-                closeCustomDateModal('yes');
-            });
-            submitCustomDate.addEventListener('click', () => {
-                const customDate = customDateInput.value;
-                if (customDate && customDateRe.test(customDate)) {
-                    closeCustomDateModal('yes');
-                    store.set(currentProfile, customDate, true);
-                } else {
-                    customDateInput.classList.add('glowing');
-                }
-            });
-            laterCustomDate.addEventListener('click', () => {
-                closeCustomDateModal('later');
-            });
-            contributionsCalendar.classList.add('dropdown');
-            contributionsCalendar.classList.add('active');
-        }
-    }
-
-    function closeCustomDateModal(permanent) {
-        contributionsCalendar.classList.remove('active');
-        body.classList.remove('menu-active');
-        localStorage.setItem('customStartStreakDateWasAsked', permanent);
     }
 }
 
