@@ -1,9 +1,5 @@
-![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/g48.png) GithubOriginalStreak
+# GithubOriginalStreak ![icon](https://raw.githubusercontent.com/Naramsim/GithubOriginalStreak/master/chrome/icons/g48.png)
 
----
-
-[![Join the chat at https://gitter.im/Naramsim/GithubOriginalStreak](https://badges.gitter.im/Naramsim/GithubOriginalStreak.svg)](https://gitter.im/Naramsim/GithubOriginalStreak?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo)
 [![Build Status](https://travis-ci.org/Naramsim/GithubOriginalStreak.svg?branch=master)](https://travis-ci.org/Naramsim/GithubOriginalStreak)
 
 Reverts GitHub contributions and streak. A browser extension.
