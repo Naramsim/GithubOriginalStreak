@@ -82,7 +82,7 @@ function inject() {
     let contributionsCalendar = qsa('.graph-before-activity-overview')[0];
 
     const vCardSelector = qsa('.vcard-username');
-    const daysSelector = qsa('.ContributionCalendar-day[data-count]');
+    const daysSelector = qsa('.ContributionCalendar-day');
 
     if (vCardSelector.length > 0) {
         currentProfile = vCardSelector[0].textContent.trim();
@@ -122,9 +122,28 @@ function inject() {
         // for each day from last day (current day) to first available day
 
         days.forEach((day, index) => {
-            const contributionCount = parseInt(day.attributes['data-count'].value, 10);
-            const contributionDate = day.attributes['data-date'].value;
-            const noContributionToday = Number(days[0].attributes['data-count'].value) === 0;
+        // Attribute patching/DOM surgery because it looks like GitHub has removed the 'data-count' attribute :(
+            const summary = day.innerHTML;
+            const parseContributionCount = () => {
+                let contributionCount = summary.substring(0, summary.indexOf(' '));
+                if (contributionCount.toLowerCase() === 'no' || !contributionCount) contributionCount = 0;
+                contributionCount = Number(contributionCount);
+                return contributionCount;
+            }
+            const extractedContributionCount = parseContributionCount();
+
+			var count = undefined;
+            if (day.attributes['data-count']) count = parseInt(day.attributes['data-count'].value, 10);
+            if (typeof count === 'undefined') days[index].setAttribute('data-count', extractedContributionCount);
+            var contributionCount = extractedContributionCount;
+            if (!contributionCount) contributionCount = 0;
+
+			var contributionDate = undefined;
+			if(day.attributes['data-date']) contributionDate = day.attributes['data-date'].value;
+            var noContributionToday = contributionCount === 0;
+            if (!contributionCount) contributionCount = 0;
+            var contributionDate = day.attributes['data-date'].value;
+            var noContributionToday = contributionCount === 0;
 
             if (contributionCount) {
                 totalContributions += contributionCount;
