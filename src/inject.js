@@ -126,22 +126,33 @@ function inject() {
             const summary = day.innerHTML;
             const parseContributionCount = () => {
                 let contributionCount = summary.substring(0, summary.indexOf(' '));
-                if (contributionCount.toLowerCase() === 'no' || !contributionCount) contributionCount = 0;
+                if (contributionCount.toLowerCase() === 'no' || !contributionCount) {
+                    contributionCount = 0;
+                }
                 contributionCount = Number(contributionCount);
                 return contributionCount;
             }
             const extractedContributionCount = parseContributionCount();
 
 			var count = undefined;
-            if (day.attributes['data-count']) count = parseInt(day.attributes['data-count'].value, 10);
-            if (typeof count === 'undefined') days[index].setAttribute('data-count', extractedContributionCount);
+            if (day.attributes['data-count']) {
+                count = parseInt(day.attributes['data-count'].value, 10);
+            }
+            if (typeof count === 'undefined') {
+                days[index].setAttribute('data-count', extractedContributionCount);
+            }
             var contributionCount = extractedContributionCount;
-            if (!contributionCount) contributionCount = 0;
-
+            if (!contributionCount) {
+                contributionCount = 0;
+            }
 			var contributionDate = undefined;
-			if(day.attributes['data-date']) contributionDate = day.attributes['data-date'].value;
+			if (day.attributes['data-date']) {
+                contributionDate = day.attributes['data-date'].value;
+            }
             var noContributionToday = contributionCount === 0;
-            if (!contributionCount) contributionCount = 0;
+            if (!contributionCount) {
+                contributionCount = 0;
+            }
             var contributionDate = day.attributes['data-date'].value;
             var noContributionToday = contributionCount === 0;
 
