@@ -1,6 +1,6 @@
 {
   "name": "github-original-streak",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "description": "Get back longest and current streak on Github prifiles",
   "scripts": {
     "commit": "git-cz",

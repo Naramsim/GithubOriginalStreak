@@ -1,9 +1,9 @@
 {
   "name": "Github Original Streak",
   "short_name": "Github Streak",
-  "version": "1.15.0",
-  "version_name": "1.15.0",
-  "manifest_version": 2,
+  "version": "1.15.1",
+  "version_name": "1.15.1",
+  "manifest_version": 3,
   "description": "Re-builds former current and longest streaks on Github profiles",
   "homepage_url": "https://github.com/Naramsim/GithubOriginalStreak",
   "author": "Naramsim",
@@ -15,9 +15,11 @@
   "default_locale": "en",
   "offline_enabled": true,
   "permissions": [
-    "*://github.com/*",
-    "*://api.github.com/*",
-    "storage"
+      "storage"
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://api.github.com/*"
   ],
   "content_scripts": [
     {
