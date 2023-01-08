@@ -149,10 +149,6 @@ function inject() {
 			if (day.attributes['data-date']) {
                 contributionDate = day.attributes['data-date'].value;
             }
-            var noContributionToday = contributionCount === 0;
-            if (!contributionCount) {
-                contributionCount = 0;
-            }
 
             var noContributionToday = contributionCount === 0;
 
