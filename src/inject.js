@@ -149,11 +149,7 @@ function inject() {
 			if (day.attributes['data-date']) {
                 contributionDate = day.attributes['data-date'].value;
             }
-            var noContributionToday = contributionCount === 0;
-            if (!contributionCount) {
-                contributionCount = 0;
-            }
-            var contributionDate = day.attributes['data-date'].value;
+
             var noContributionToday = contributionCount === 0;
 
             if (contributionCount) {
@@ -181,7 +177,6 @@ function inject() {
                 // and longestStreakEndingDate is calculated as longestStreakStartingDate + longestStreak days
                 longestStreakEndingDate = moment(contributionDate).add(longestStreak - 1, 'days');
             }
-
             if (contributionCount && isCurrentStreak) {
                 currentStreak += 1;
             } else if (isCurrentStreak) {
@@ -189,7 +184,8 @@ function inject() {
                 // end currentStreak and
                 // set isCurrentStreak to false
                 // only if we are not processing the very last day
-                if (index !== 0) {
+                // check that the contribution date isn't undefined (this an artefact from the fact that the legend now makes its way into the array of contribution squares.)
+                if (index !== 0 && contributionDate) {
                     if (firstContributionDate) {
                         currentStreakText = getCurrentStreakText(firstContributionDate, noContributionToday);
                     }
