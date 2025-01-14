@@ -25,6 +25,14 @@ To download the extensions just click on the badges above, they will bring you t
 
 Please refer [Contributing guidelines](contributing.md) to enhance your contribution experience.
 
+## Install
+
+```sh
+npm i --legacy-peer-deps
+npm run build
+npm run package
+```
+
 ## Contributors
 
 [Naramsim](https://github.com/Naramsim) and [sarbbottam](https://github.com/sarbbottam)

@@ -1,7 +1,7 @@
 {
   "name": "github-original-streak",
-  "version": "0.15.1",
-  "description": "Get back longest and current streak on Github prifiles",
+  "version": "0.16.0",
+  "description": "Get back longest and current streak on Github profiles",
   "scripts": {
     "commit": "git-cz",
     "test": "xo",
@@ -63,7 +63,7 @@
     }
   },
   "dependencies": {
-    "moment": "^2.29.1",
+    "moment": "^2.30.1",
     "github-api": "^3.4.0"
   }
 }

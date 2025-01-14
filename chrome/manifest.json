@@ -1,8 +1,8 @@
 {
   "name": "Github Original Streak",
   "short_name": "Github Streak",
-  "version": "1.15.1",
-  "version_name": "1.15.1",
+  "version": "1.16.0",
+  "version_name": "1.16.0",
   "manifest_version": 3,
   "description": "Re-builds former current and longest streaks on Github profiles",
   "homepage_url": "https://github.com/Naramsim/GithubOriginalStreak",
@@ -27,7 +27,7 @@
         "*://github.com/*"
       ],
       "all_frames": false,
-      "run_at": "document_end",
+      "run_at": "document_idle",
       "js": [
         "src/inject.js"
       ]

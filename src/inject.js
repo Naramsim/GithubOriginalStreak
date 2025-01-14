@@ -54,6 +54,12 @@ function getStreakHTML(data) {
     }).join('\n');
 }
 
+function while_2s() {
+    setInterval(() => {
+        inject()
+    }, 2000);
+}
+
 function inject() {
     let currentProfile = false;
     let days = false;
@@ -81,15 +87,23 @@ function inject() {
 
     let contributionsCalendar = qsa('.graph-before-activity-overview')[0];
 
-    const vCardSelector = qsa('.vcard-username');
-    const daysSelector = qsa('.ContributionCalendar-day');
-
-    if (vCardSelector.length > 0) {
-        currentProfile = vCardSelector[0].textContent.trim();
+    if (! contributionsCalendar) {
+        return 0
     }
+
+    if (document.querySelector('.original-streak')) {
+        return 0
+    }
+
+    const daysSelector = qsa('.ContributionCalendar-grid .ContributionCalendar-day');
+
+
     if (daysSelector.length > 0) {
         days = Array.from(daysSelector).reverse();
     }
+
+    currentProfile = window.location.pathname.substring(1);
+
     if (contributionsCalendar && currentProfile) {
         parse();
 
@@ -97,6 +111,7 @@ function inject() {
         // retrieve custom start streak date
         if (nonContributingDays <= 30) {
             // invoke and wait data retrieval
+
             store.get(currentProfile).then(userData => {
                 if (userData) {
                     const match = userData.data.match(/^(\d{4}-\d{2}-\d{2})?(?:#(\d{4}-\d{2}-\d{2}))?(?:@([01]))?$/);
@@ -120,16 +135,22 @@ function inject() {
         // days[23].attributes['data-count'].value = 0
 
         // for each day from last day (current day) to first available day
-
         days.forEach((day, index) => {
         // Attribute patching/DOM surgery because it looks like GitHub has removed the 'data-count' attribute :(
-            const summary = day.innerHTML;
+            const day_id = day.id;
+            if (! day_id.startsWith('contribution-day-component') ) {
+                return 0
+            }
+
             const parseContributionCount = () => {
-                let contributionCount = summary.substring(0, summary.indexOf(' '));
-                if (contributionCount.toLowerCase() === 'no' || !contributionCount) {
-                    contributionCount = 0;
+                let contributionCount = 0
+                let day_contributions = parseInt(qs(`tool-tip[for=${day_id}]`).textContent.split(' ')[0]) // parseInt inteprets 0 as false
+                if (day_contributions) {
+                    contributionCount += day_contributions
+                } else {
+                    contributionCount += 0 // Unnecessary
                 }
-                contributionCount = Number(contributionCount);
+
                 return contributionCount;
             }
             const extractedContributionCount = parseContributionCount();
@@ -275,11 +296,11 @@ function inject() {
             const container = document.createElement('div');
             container.innerHTML = getStreakHTML(data);
             container.classList.add('original-streak')
-            if (!document.querySelector('.original-streak')) {
+            if (!qs('.original-streak')) {
                 contributionsCalendar.appendChild(container);
             }
         }
     }
 }
 
-module.exports = inject;
+module.exports = while_2s;
